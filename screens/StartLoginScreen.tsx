@@ -26,7 +26,7 @@ const Footer = styled.View`
   gap: 12px; /* 버튼 사이 간격 */
 `;
 
-export default function StartLoginScreen() {
+const StartLoginScreen = () => {
   const navi = useNavigation<NativeStackNavigationProp<StackList>>();
 
   const goToLoginScreen = () => {
@@ -53,4 +53,6 @@ export default function StartLoginScreen() {
       </Footer>
     </Screen>
   );
-}
+};
+
+export default StartLoginScreen;

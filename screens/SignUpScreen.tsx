@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components/native";
 import BrandHeader from "../components/BrandHeader";
 import PrimaryButton from "../components/PrimaryButton";
-import BrandTextField from "../components/BrandTextField"; // ✅ 공용 인풋
-import { primaryColor, textOpacityColor } from "../styles/Color";
+import BrandTextField from "../components/BrandTextField";
+import { primaryColor } from "../styles/Color";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackList } from "../navigation/AppNavigator";
 
 const Screen = styled.SafeAreaView`
   flex: 1;
@@ -11,7 +14,7 @@ const Screen = styled.SafeAreaView`
 `;
 
 const Wrap = styled.ScrollView.attrs({
-  contentContainerStyle: { paddingBottom: 32 },
+  contentContainerStyle: { paddingTop: 24, paddingBottom: 32 }, // ⬅️ 상단 여백
   keyboardShouldPersistTaps: "handled",
 })`
   flex: 1;
@@ -28,14 +31,16 @@ const Title = styled.Text`
   color: #000;
 `;
 
-const InputSpacer = styled.View`
-  height: 12px;
+// 입력 필드들을 묶어서 gap으로 간격 관리
+const FormStack = styled.View`
+  width: 100%;
+  gap: 12px;
 `;
 
 const ButtonRow = styled.View`
   width: 100%;
   align-items: center;
-  margin-top: 12px;
+  margin-top: 16px;
 `;
 
 function SignUpScreen() {
@@ -43,8 +48,13 @@ function SignUpScreen() {
   const [pw, setPw] = useState("");
   const [pw2, setPw2] = useState("");
 
-  // 간단한 유효성: 아이디/비번 채움 + 비번 일치
   const isValid = userId.trim().length > 0 && pw.length > 0 && pw === pw2;
+
+  const navi = useNavigation<NativeStackNavigationProp<StackList>>();
+
+  const goToStudentVerify = () => {
+    navi.navigate("StudentVerify");
+  };
 
   return (
     <Screen>
@@ -54,34 +64,29 @@ function SignUpScreen() {
         <Container>
           <Title>회원가입</Title>
 
-          {/* 아이디 */}
-          <BrandTextField
-            placeholder="아이디"
-            value={userId}
-            onChangeText={setUserId}
-            autoCapitalize="none"
-            returnKeyType="next"
-          />
-          <InputSpacer />
-
-          {/* 비밀번호 */}
-          <BrandTextField
-            placeholder="비밀번호"
-            value={pw}
-            onChangeText={setPw}
-            secureToggle
-            returnKeyType="next"
-          />
-          <InputSpacer />
-
-          {/* 비밀번호 확인 */}
-          <BrandTextField
-            placeholder="비밀번호 확인"
-            value={pw2}
-            onChangeText={setPw2}
-            secureToggle
-            returnKeyType="done"
-          />
+          <FormStack>
+            <BrandTextField
+              placeholder="아이디"
+              value={userId}
+              onChangeText={setUserId}
+              autoCapitalize="none"
+              returnKeyType="next"
+            />
+            <BrandTextField
+              placeholder="비밀번호"
+              value={pw}
+              onChangeText={setPw}
+              secureToggle
+              returnKeyType="next"
+            />
+            <BrandTextField
+              placeholder="비밀번호 확인"
+              value={pw2}
+              onChangeText={setPw2}
+              secureToggle
+              returnKeyType="done"
+            />
+          </FormStack>
 
           <ButtonRow>
             <PrimaryButton
@@ -89,10 +94,8 @@ function SignUpScreen() {
               bgColor={primaryColor}
               onPress={() => {
                 if (!isValid) return;
-                // TODO: 학생 인증 플로우로 이동
-                // navigation?.navigate?.("StudentVerify");
+                goToStudentVerify();
               }}
-              // PrimaryButton이 지원하면 활성/비활성 걸어두기
               // disabled={!isValid}
             />
           </ButtonRow>
