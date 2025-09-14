@@ -2,11 +2,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import StartingScreen from "../screens/StartingScreen";
 import StartLoginScreen from "../screens/StartLoginScreen";
 import LoginScreen from "../screens/LoginScreen";
+import SignUpScreen from "../screens/SignUpScreen";
 
 export type StackList = {
   Starting: undefined;
   StartLogin: undefined;
   Login: undefined;
+  SignUp: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackList>();
@@ -20,6 +22,7 @@ const AppNavigator = () => {
       <Stack.Screen name="Starting" component={StartingScreen} />
       <Stack.Screen name="StartLogin" component={StartLoginScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="SignUp" component={SignUpScreen} />
     </Stack.Navigator>
   );
 };

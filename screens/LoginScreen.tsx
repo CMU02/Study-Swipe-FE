@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components/native";
 import BrandHeader from "../components/BrandHeader";
 import PrimaryButton from "../components/PrimaryButton";
-import { primaryColor, textOpacityColor } from "../styles/Color";
+import { primaryColor } from "../styles/Color";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackList } from "../navigation/AppNavigator";
+import BrandTextField from "../components/BrandTextField";
 
 const Screen = styled.SafeAreaView`
   flex: 1;
@@ -24,22 +28,6 @@ const Title = styled.Text`
   font-size: 40px;
   font-weight: 600;
   margin: 16px 0 20px;
-  color: #000;
-`;
-
-const Input = styled.TextInput`
-  font-size: 15px;
-  font-weight: 600;
-
-  width: 100%;
-  height: 48px;
-  padding: 0 14px;
-  border-radius: 8px;
-
-  border-width: 2px;
-  border-color: ${textOpacityColor};
-
-  background-color: #fff;
   color: #000;
 `;
 
@@ -78,6 +66,12 @@ export default function LoginScreen() {
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
 
+  const navi = useNavigation<NativeStackNavigationProp<StackList>>();
+
+  const goToSignUpScreen = () => {
+    navi.navigate("SignUp");
+  };
+
   return (
     <Screen>
       <BrandHeader />
@@ -87,23 +81,21 @@ export default function LoginScreen() {
           <Title>로그인</Title>
 
           {/* 아이디 */}
-          <Input
+          <BrandTextField
             placeholder="아이디"
             value={id}
             onChangeText={setId}
-            placeholderTextColor={textOpacityColor}
             autoCapitalize="none"
             returnKeyType="next"
           />
           <InputSpacer />
 
           {/* 비밀번호 */}
-          <Input
+          <BrandTextField
             placeholder="비밀번호"
             value={pw}
             onChangeText={setPw}
-            placeholderTextColor={textOpacityColor}
-            secureTextEntry
+            secureToggle // 👈 비밀번호 입력은 눈 아이콘 토글 활성화
             returnKeyType="done"
           />
 
@@ -113,7 +105,7 @@ export default function LoginScreen() {
             <Divider>|</Divider>
             <LinkText>비밀번호 찾기</LinkText>
             <Divider>|</Divider>
-            <LinkText>회원가입</LinkText>
+            <LinkText onPress={goToSignUpScreen}>회원가입</LinkText>
           </LinksRow>
 
           {/* 로그인 버튼 */}

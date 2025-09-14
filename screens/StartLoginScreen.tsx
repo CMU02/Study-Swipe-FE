@@ -29,8 +29,12 @@ const Footer = styled.View`
 export default function StartLoginScreen() {
   const navi = useNavigation<NativeStackNavigationProp<StackList>>();
 
-  const goToScreen = () => {
+  const goToLoginScreen = () => {
     navi.navigate("Login");
+  };
+
+  const goToSignUpScreen = () => {
+    navi.navigate("SignUp");
   };
 
   return (
@@ -40,11 +44,11 @@ export default function StartLoginScreen() {
       </Content>
 
       <Footer>
-        <PrimaryButton title="로그인" onPress={goToScreen} />
+        <PrimaryButton title="로그인" onPress={goToLoginScreen} />
         <PrimaryButton
           title="회원가입"
           bgColor={secondaryColor}
-          onPress={() => {}}
+          onPress={goToSignUpScreen}
         />
       </Footer>
     </Screen>
