@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import BrandHeader from "../components/BrandHeader";
-import PrimaryButton from "../components/PrimaryButton";
-import { primaryColor } from "../styles/Color";
+import BrandHeader from "../../components/BrandHeader";
+import PrimaryButton from "../../components/PrimaryButton";
+import BrandTextField from "../../components/BrandTextField";
+import { primaryColor } from "../../styles/Color";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StackList } from "../navigation/AppNavigator";
-import BrandTextField from "../components/BrandTextField";
+import { StackList } from "../../navigation/AppNavigator";
 
 const Screen = styled.SafeAreaView`
   flex: 1;
@@ -14,7 +14,7 @@ const Screen = styled.SafeAreaView`
 `;
 
 const Wrap = styled.ScrollView.attrs({
-  contentContainerStyle: { paddingTop: 24, paddingBottom: 32 }, // ⬅️ 상단 여백만 지정
+  contentContainerStyle: { paddingTop: 24, paddingBottom: 32 }, // ⬅️ 상단 여백
   keyboardShouldPersistTaps: "handled",
 })`
   flex: 1;
@@ -37,41 +37,23 @@ const FormStack = styled.View`
   gap: 12px;
 `;
 
-const LinksRow = styled.View`
-  width: 100%;
-  margin: 12px 0 24px;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 18px;
-`;
-
-const LinkText = styled.Text`
-  font-size: 12px;
-  font-weight: 600;
-  color: #000;
-`;
-
-const Divider = styled.Text`
-  font-size: 12px;
-  font-weight: 600;
-  color: #000;
-  opacity: 0.5;
-`;
-
 const ButtonRow = styled.View`
   width: 100%;
   align-items: center;
+  margin-top: 16px;
 `;
 
-const LoginScreen = () => {
-  const [id, setId] = useState("");
+function SignUpScreen() {
+  const [userId, setUserId] = useState("");
   const [pw, setPw] = useState("");
+  const [pw2, setPw2] = useState("");
+
+  const isValid = userId.trim().length > 0 && pw.length > 0 && pw === pw2;
 
   const navi = useNavigation<NativeStackNavigationProp<StackList>>();
 
-  const goToSignUpScreen = () => {
-    navi.navigate("SignUp");
+  const goToStudentVerify = () => {
+    navi.navigate("StudentVerify");
   };
 
   return (
@@ -80,51 +62,47 @@ const LoginScreen = () => {
 
       <Wrap>
         <Container>
-          <Title>로그인</Title>
+          <Title>회원가입</Title>
 
           <FormStack>
-            {/* 아이디 */}
             <BrandTextField
               placeholder="아이디"
-              value={id}
-              onChangeText={setId}
+              value={userId}
+              onChangeText={setUserId}
               autoCapitalize="none"
               returnKeyType="next"
             />
-
-            {/* 비밀번호 */}
             <BrandTextField
               placeholder="비밀번호"
               value={pw}
               onChangeText={setPw}
               secureToggle
+              returnKeyType="next"
+            />
+            <BrandTextField
+              placeholder="비밀번호 확인"
+              value={pw2}
+              onChangeText={setPw2}
+              secureToggle
               returnKeyType="done"
             />
           </FormStack>
 
-          {/* 링크 모음 */}
-          <LinksRow>
-            <LinkText>아이디 찾기</LinkText>
-            <Divider>|</Divider>
-            <LinkText>비밀번호 찾기</LinkText>
-            <Divider>|</Divider>
-            <LinkText onPress={goToSignUpScreen}>회원가입</LinkText>
-          </LinksRow>
-
-          {/* 로그인 버튼 */}
           <ButtonRow>
             <PrimaryButton
-              title="로그인"
+              title="학생 인증하러 가기"
               bgColor={primaryColor}
               onPress={() => {
-                // TODO: 로그인 처리
+                if (!isValid) return;
+                goToStudentVerify();
               }}
+              // disabled={!isValid}
             />
           </ButtonRow>
         </Container>
       </Wrap>
     </Screen>
   );
-};
+}
 
-export default LoginScreen;
+export default SignUpScreen;

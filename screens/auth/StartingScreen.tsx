@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import styled from "styled-components/native";
-import SplashLogo from "../components/SplashLogo";
+import SplashLogo from "../../components/SplashLogo";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StackList } from "../navigation/AppNavigator";
+import { StackList } from "../../navigation/AppNavigator";
 
 const Container = styled.View`
   flex: 1;

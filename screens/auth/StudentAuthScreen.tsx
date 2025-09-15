@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components/native";
-import BrandHeader from "../components/BrandHeader";
-import BrandTextField from "../components/BrandTextField";
-import PrimaryButton from "../components/PrimaryButton";
+import BrandHeader from "../../components/BrandHeader";
+import BrandTextField from "../../components/BrandTextField";
+import PrimaryButton from "../../components/PrimaryButton";
 import {
   primaryColor,
   secondaryColor,
   textOpacityColor,
   unClickColor,
-} from "../styles/Color";
+} from "../../styles/Color";
 import { TouchableOpacity, Modal } from "react-native";
 
 /* ----------------- Layout ----------------- */
@@ -133,7 +133,7 @@ const SheetPrimaryBtnWrap = styled.View`
 
 /* ----------------- Component ----------------- */
 
-export default function StudentAuthScreen() {
+const StudentAuthScreen = () => {
   // ----- 기존 인증 상태 -----
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -369,4 +369,6 @@ export default function StudentAuthScreen() {
       </Modal>
     </Screen>
   );
-}
+};
+
+export default StudentAuthScreen;

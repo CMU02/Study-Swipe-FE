@@ -25,7 +25,7 @@ export default function SplashLogo() {
   return (
     <Container>
       <TagLine>함께 소통하며{"\n"}배우는 즐거움</TagLine>
-      <Logo source={require("../assets/images/logo.png")} />
+      <Logo source={require("../assets/images/logo.svg")} />
     </Container>
   );
 }

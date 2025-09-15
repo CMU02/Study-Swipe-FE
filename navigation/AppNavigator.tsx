@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import StartingScreen from "../screens/StartingScreen";
-import StartLoginScreen from "../screens/StartLoginScreen";
-import LoginScreen from "../screens/LoginScreen";
-import SignUpScreen from "../screens/SignUpScreen";
-import StudentAuthScreen from "../screens/StudentAuthScreen";
+import StartingScreen from "../screens/auth/StartingScreen";
+import StartLoginScreen from "../screens/auth/StartLoginScreen";
+import LoginScreen from "../screens/auth/LoginScreen";
+import SignUpScreen from "../screens/auth/SignUpScreen";
+import StudentAuthScreen from "../screens/auth/StudentAuthScreen";
 
 export type StackList = {
   Starting: undefined;
