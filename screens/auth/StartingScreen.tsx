@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styled from "styled-components/native";
 import SplashLogo from "../../components/SplashLogo";
 import { useNavigation } from "@react-navigation/native";

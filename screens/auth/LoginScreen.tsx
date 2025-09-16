@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components/native";
 import BrandHeader from "../../components/BrandHeader";
 import PrimaryButton from "../../components/PrimaryButton";

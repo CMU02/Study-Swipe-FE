@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import styled from "styled-components/native";
 import { textOpacityColor, textColor, secondaryColor } from "../styles/Color";
 import { Feather } from "@expo/vector-icons";

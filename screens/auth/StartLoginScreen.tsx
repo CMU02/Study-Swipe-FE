@@ -30,7 +30,7 @@ const StartLoginScreen = () => {
   const navi = useNavigation<NativeStackNavigationProp<StackList>>();
 
   const goToLoginScreen = () => {
-    navi.navigate("Login");
+    navi.navigate("Today");
   };
 
   const goToSignUpScreen = () => {
