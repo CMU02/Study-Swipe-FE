@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components/native";
-import BrandHeader from "../components/BrandHeader";
-import PrimaryButton from "../components/PrimaryButton";
-import { primaryColor } from "../styles/Color";
+import BrandHeader from "../../components/BrandHeader";
+import PrimaryButton from "../../components/PrimaryButton";
+import { primaryColor } from "../../styles/Color";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StackList } from "../navigation/AppNavigator";
-import BrandTextField from "../components/BrandTextField";
+import { StackList } from "../../navigation/AppNavigator";
+import BrandTextField from "../../components/BrandTextField";
 
 const Screen = styled.SafeAreaView`
   flex: 1;
@@ -14,7 +14,7 @@ const Screen = styled.SafeAreaView`
 `;
 
 const Wrap = styled.ScrollView.attrs({
-  contentContainerStyle: { paddingBottom: 32 },
+  contentContainerStyle: { paddingTop: 24, paddingBottom: 32 }, // ⬅️ 상단 여백만 지정
   keyboardShouldPersistTaps: "handled",
 })`
   flex: 1;
@@ -31,8 +31,10 @@ const Title = styled.Text`
   color: #000;
 `;
 
-const InputSpacer = styled.View`
-  height: 12px;
+// 입력 필드들을 묶어서 gap으로 간격 관리
+const FormStack = styled.View`
+  width: 100%;
+  gap: 12px;
 `;
 
 const LinksRow = styled.View`
@@ -62,7 +64,7 @@ const ButtonRow = styled.View`
   align-items: center;
 `;
 
-export default function LoginScreen() {
+const LoginScreen = () => {
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
 
@@ -80,24 +82,25 @@ export default function LoginScreen() {
         <Container>
           <Title>로그인</Title>
 
-          {/* 아이디 */}
-          <BrandTextField
-            placeholder="아이디"
-            value={id}
-            onChangeText={setId}
-            autoCapitalize="none"
-            returnKeyType="next"
-          />
-          <InputSpacer />
+          <FormStack>
+            {/* 아이디 */}
+            <BrandTextField
+              placeholder="아이디"
+              value={id}
+              onChangeText={setId}
+              autoCapitalize="none"
+              returnKeyType="next"
+            />
 
-          {/* 비밀번호 */}
-          <BrandTextField
-            placeholder="비밀번호"
-            value={pw}
-            onChangeText={setPw}
-            secureToggle // 👈 비밀번호 입력은 눈 아이콘 토글 활성화
-            returnKeyType="done"
-          />
+            {/* 비밀번호 */}
+            <BrandTextField
+              placeholder="비밀번호"
+              value={pw}
+              onChangeText={setPw}
+              secureToggle
+              returnKeyType="done"
+            />
+          </FormStack>
 
           {/* 링크 모음 */}
           <LinksRow>
@@ -122,4 +125,6 @@ export default function LoginScreen() {
       </Wrap>
     </Screen>
   );
-}
+};
+
+export default LoginScreen;

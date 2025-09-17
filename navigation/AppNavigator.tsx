@@ -1,16 +1,18 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import StartingScreen from "../screens/StartingScreen";
-import StartLoginScreen from "../screens/StartLoginScreen";
-import LoginScreen from "../screens/LoginScreen";
-import SignUpScreen from "../screens/SignUpScreen";
-import UseSetting_Brith from "../screens/useSetting/UseSetting_Brith";
+import StartingScreen from "../screens/auth/StartingScreen";
+import StartLoginScreen from "../screens/auth/StartLoginScreen";
+import LoginScreen from "../screens/auth/LoginScreen";
+import SignUpScreen from "../screens/auth/SignUpScreen";
+import StudentAuthScreen from "../screens/auth/StudentAuthScreen";
+import TodayScreen from "../screens/feed/TodayScreen";
 
 export type StackList = {
   Starting: undefined;
   StartLogin: undefined;
   Login: undefined;
   SignUp: undefined;
-  BrithSetting: undefined;
+  StudentVerify: undefined;
+  Today: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackList>();
@@ -25,7 +27,8 @@ const AppNavigator = () => {
       <Stack.Screen name="StartLogin" component={StartLoginScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
-      <Stack.Screen name="BrithSetting" component={UseSetting_Brith} />
+      <Stack.Screen name="StudentVerify" component={StudentAuthScreen} />
+      <Stack.Screen name="Today" component={TodayScreen} />
     </Stack.Navigator>
   );
 };

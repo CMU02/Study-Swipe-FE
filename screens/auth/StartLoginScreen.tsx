@@ -1,10 +1,10 @@
 import styled from "styled-components/native";
-import SplashLogo from "../components/SplashLogo";
-import PrimaryButton from "../components/PrimaryButton";
-import { secondaryColor } from "../styles/Color";
+import SplashLogo from "../../components/SplashLogo";
+import PrimaryButton from "../../components/PrimaryButton";
+import { secondaryColor } from "../../styles/Color";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StackList } from "../navigation/AppNavigator";
+import { StackList } from "../../navigation/AppNavigator";
 
 const Screen = styled.SafeAreaView`
   flex: 1;
@@ -26,11 +26,11 @@ const Footer = styled.View`
   gap: 12px; /* 버튼 사이 간격 */
 `;
 
-export default function StartLoginScreen() {
+const StartLoginScreen = () => {
   const navi = useNavigation<NativeStackNavigationProp<StackList>>();
 
   const goToLoginScreen = () => {
-    navi.navigate("Login");
+    navi.navigate("Today");
   };
 
   const goToSignUpScreen = () => {
@@ -53,4 +53,6 @@ export default function StartLoginScreen() {
       </Footer>
     </Screen>
   );
-}
+};
+
+export default StartLoginScreen;
