@@ -35,7 +35,7 @@ const Wrapper = styled.View`
   position: relative;
 `;
 
-const Trigger = styled(TouchableOpacity)`
+const Trigger = styled.TouchableOpacity`
   height: 48px;
   min-width: 120px;
   border-width: 2px;
@@ -49,19 +49,19 @@ const Trigger = styled(TouchableOpacity)`
   justify-content: space-between;
 `;
 
-const TriggerText = styled(Text)`
+const TriggerText = styled.Text`
   font-size: 15px;
   font-weight: 600;
   color: ${textOpacityColor};
 `;
 
-const CaretIcon = styled(Image)`
+const CaretIcon = styled.Image`
   width: 10px;
   height: 10px;
   margin-left: 8px;
 `;
 
-const Dropdown = styled(View)<DropdownStyleProps>`
+const Dropdown = styled.View<DropdownStyleProps>`
   position: absolute;
   left: 0px;
   top: ${({ top }) => `${top}px`};
@@ -77,11 +77,11 @@ const Dropdown = styled(View)<DropdownStyleProps>`
   elevation: 6;
 `;
 
-const Option = styled(TouchableOpacity)`
+const Option = styled.TouchableOpacity`
   padding: 12px;
 `;
 
-const OptionText = styled(Text)`
+const OptionText = styled.Text`
   font-size: 15px;
   color: ${textOpacityColor};
 `;
