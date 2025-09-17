@@ -7,7 +7,7 @@ import {
   Image,
 } from "react-native";
 import styled from "styled-components/native";
-import { textOpacityColor } from "../styles/Color";
+import { textOpacityColor } from "../../styles/Color";
 
 /** 옵션 항목: 문자열 또는 {label, value} 객체 */
 export type OptionItem = string | { label: string; value: string };
@@ -131,8 +131,8 @@ export default function Select({
         <CaretIcon
           source={
             open
-              ? require("../assets/images/listUp.png")
-              : require("../assets/images/listDown.png")
+              ? require("../../assets/images/listUp.png")
+              : require("../../assets/images/listDown.png")
           }
           resizeMode="contain"
         />

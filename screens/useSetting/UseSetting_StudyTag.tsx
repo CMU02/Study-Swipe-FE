@@ -1,9 +1,8 @@
 import { useState } from "react";
-import BrandTextField from "../../components/BrandTextField";
+import BrandTextField from "../../components/input/BrandTextField";
 import styled from "styled-components/native";
-import PrimaryButton from "../../components/PrimaryButton";
+import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -49,6 +48,7 @@ const Answer = styled.View`
 `;
 
 export default function UseSetting_StudyTag() {
+  // 1번부터 차례대로 우선순위 높은 순
   const [tag1, setTag1] = useState<string>("");
   const [tag2, setTag2] = useState<string>("");
   const [tag3, setTag3] = useState<string>("");
@@ -63,6 +63,7 @@ export default function UseSetting_StudyTag() {
           총 5개까지 설정 가능하며 우선 순위대로 입력하여주세요!
         </SubQuestion>
         <Answer>
+          {/* placeholder 작성할 때 문제점, 안에 값이 string 문자 값만 받아서 component나 icon을 사용할 수 없음, 방법 모색중.. */}
           <BrandTextField
             value={tag1}
             onChangeText={setTag1}

@@ -6,7 +6,7 @@ import {
   Animated,
 } from "react-native";
 import styled from "styled-components/native";
-import BrandHeader from "../../components/BrandHeader";
+import BrandHeader from "../../components/logo/BrandHeader";
 import StudyCard from "../../components/StudyCard";
 import BottomTabBar from "../../components/BottomTabBar";
 import TopTabs from "../../components/TopTabs";

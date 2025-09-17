@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import styled from "styled-components/native";
-import { clickColor, unClickColor, secondaryColor } from "../styles/Color";
+import { clickColor, unClickColor, secondaryColor } from "../../styles/Color";
 
 /** 문자열 또는 {label,value} 형태 모두 지원 */
 export type OptionItem = string | { label: string; value: string };

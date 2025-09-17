@@ -1,7 +1,7 @@
 import { useState } from "react";
-import BrandTextField from "../../components/BrandTextField";
+import BrandTextField from "../../components/input/BrandTextField";
 import styled from "styled-components/native";
-import PrimaryButton from "../../components/PrimaryButton";
+import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
 
 const Container = styled.SafeAreaView`
@@ -40,6 +40,10 @@ const Answer = styled.View`
 
 export default function UseSetting_College() {
   const [college, setCollege] = useState<string>("");
+  // 정상적인 값이 들어갔는지 확인하는 함수 ("대학교" 단어가 들어있는지 판별)
+  const hasUniversity = () => {
+    return college.includes("대학교");
+  };
   return (
     <Container>
       <Top>
@@ -55,7 +59,11 @@ export default function UseSetting_College() {
         </Answer>
       </Top>
       <Bottom>
-        <PrimaryButton title="다음" bgColor={clickColor} />
+        <PrimaryButton
+          title="다음"
+          bgColor={clickColor}
+          disabled={!hasUniversity()}
+        />
       </Bottom>
     </Container>
   );

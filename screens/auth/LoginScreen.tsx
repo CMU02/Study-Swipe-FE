@@ -1,12 +1,12 @@
 import { useState } from "react";
 import styled from "styled-components/native";
-import BrandHeader from "../../components/BrandHeader";
-import PrimaryButton from "../../components/PrimaryButton";
+import BrandHeader from "../../components/logo/BrandHeader";
+import PrimaryButton from "../../components/button/PrimaryButton";
 import { primaryColor } from "../../styles/Color";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackList } from "../../navigation/AppNavigator";
-import BrandTextField from "../../components/BrandTextField";
+import BrandTextField from "../../components/input/BrandTextField";
 
 const Screen = styled.SafeAreaView`
   flex: 1;

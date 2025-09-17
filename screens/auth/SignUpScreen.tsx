@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components/native";
-import BrandHeader from "../../components/BrandHeader";
-import PrimaryButton from "../../components/PrimaryButton";
-import BrandTextField from "../../components/BrandTextField";
+import BrandHeader from "../../components/logo/BrandHeader";
+import PrimaryButton from "../../components/button/PrimaryButton";
+import BrandTextField from "../../components/input/BrandTextField";
 import { primaryColor } from "../../styles/Color";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

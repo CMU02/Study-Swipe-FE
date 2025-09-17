@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
-import SplashLogo from "../../components/SplashLogo";
-import PrimaryButton from "../../components/PrimaryButton";
-import { secondaryColor } from "../../styles/Color";
+import SplashLogo from "../../components/logo/SplashLogo";
+import PrimaryButton from "../../components/button/PrimaryButton";
+import { primaryColor, secondaryColor } from "../../styles/Color";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackList } from "../../navigation/AppNavigator";
@@ -44,7 +44,11 @@ const StartLoginScreen = () => {
       </Content>
 
       <Footer>
-        <PrimaryButton title="로그인" onPress={goToLoginScreen} />
+        <PrimaryButton
+          title="로그인"
+          onPress={goToLoginScreen}
+          bgColor={primaryColor}
+        />
         <PrimaryButton
           title="회원가입"
           bgColor={secondaryColor}

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import BrandTextField from "../../components/BrandTextField";
+import BrandTextField from "../../components/input/BrandTextField";
 import styled from "styled-components/native";
-import PrimaryButton from "../../components/PrimaryButton";
+import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
 
 const Container = styled.SafeAreaView`
@@ -39,15 +39,21 @@ const Answer = styled.View`
 `;
 
 export default function UseSetting_Goal() {
-  const [college, setCollege] = useState<string>("");
+  // 목표에 대한 값 저장
+  const [goal, setGoal] = useState<string>("");
+  // 빈 값인지 체크하는 함수
+  const isGoalEmpty = () => {
+    return goal.trim().length === 0;
+  };
+
   return (
     <Container>
       <Top>
         <Question>스터디의 목적이{"\n"}무엇인가요?</Question>
         <Answer>
           <BrandTextField
-            value={college}
-            onChangeText={setCollege}
+            value={goal}
+            onChangeText={setGoal}
             placeholder="예) 자격증 공부, 전공 공부 등"
             autoCapitalize="none"
             returnKeyType="done"
@@ -55,7 +61,11 @@ export default function UseSetting_Goal() {
         </Answer>
       </Top>
       <Bottom>
-        <PrimaryButton title="다음" bgColor={clickColor} />
+        <PrimaryButton
+          title="다음"
+          bgColor={clickColor}
+          disabled={isGoalEmpty()}
+        />
       </Bottom>
     </Container>
   );

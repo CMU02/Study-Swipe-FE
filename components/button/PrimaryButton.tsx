@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { clickColor, unClickColor } from "../styles/Color";
+import { clickColor, unClickColor } from "../../styles/Color";
 
 interface PrimaryButtonProps {
   // 버튼 글자
@@ -38,7 +38,7 @@ const Button = styled.TouchableOpacity<ButtonProps>`
   align-items: center;
 
   background-color: ${(props) =>
-    props.disabled ? unClickColor : props.bgColor || clickColor};
+    props.disabled ? unClickColor : props.bgColor};
 `;
 
 const Label = styled.Text<LabelProps>`

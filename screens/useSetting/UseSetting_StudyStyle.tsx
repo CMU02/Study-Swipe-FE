@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
-import PrimaryButton from "../../components/PrimaryButton";
+import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
-import StylePickButton from "../../components/StylePickButton";
+import StylePickButton from "../../components/button/StylePickButton";
 import { use, useState } from "react";
 
 const Container = styled.SafeAreaView`
@@ -40,7 +40,9 @@ const Answer = styled.View`
 `;
 
 export default function UseSetting_StudyStyle() {
+  // 선호인원
   const [peopleNumber, setPeopleNumber] = useState<string>("1~2인");
+  // 학습 스타일
   const [studyStyle, setStudyStyle] = useState<string>("멘토");
 
   return (

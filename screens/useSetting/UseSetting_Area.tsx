@@ -1,8 +1,8 @@
 import styled from "styled-components/native";
-import GenderSelect from "../../components/Select";
-import Select from "../../components/Select";
+import GenderSelect from "../../components/input/Select";
+import Select from "../../components/input/Select";
 import { useState } from "react";
-import PrimaryButton from "../../components/PrimaryButton";
+import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
 
 const Container = styled.SafeAreaView`

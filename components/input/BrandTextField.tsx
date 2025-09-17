@@ -1,6 +1,10 @@
 import { useMemo, useState } from "react";
 import styled from "styled-components/native";
-import { textOpacityColor, textColor, secondaryColor } from "../styles/Color";
+import {
+  textOpacityColor,
+  textColor,
+  secondaryColor,
+} from "../../styles/Color";
 import { Feather } from "@expo/vector-icons";
 
 type ReturnKey = "done" | "go" | "next" | "search" | "send";

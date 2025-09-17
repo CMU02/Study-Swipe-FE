@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import PrimaryButton from "../../components/PrimaryButton";
+import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor, secondaryColor, unClickColor } from "../../styles/Color";
 import Slider from "@react-native-community/slider"; // ← 슬라이더
 

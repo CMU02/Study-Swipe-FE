@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
-import StylePickButton from "../../components/StylePickButton";
+import StylePickButton from "../../components/button/StylePickButton";
 import { useState } from "react";
-import PrimaryButton from "../../components/PrimaryButton";
+import PrimaryButton from "../../components/button/PrimaryButton";
 import { secondaryColor } from "../../styles/Color";
 
 const Container = styled.SafeAreaView`

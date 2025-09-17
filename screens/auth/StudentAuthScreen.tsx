@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components/native";
-import BrandHeader from "../../components/BrandHeader";
-import BrandTextField from "../../components/BrandTextField";
-import PrimaryButton from "../../components/PrimaryButton";
+import BrandHeader from "../../components/logo/BrandHeader";
+import BrandTextField from "../../components/input/BrandTextField";
+import PrimaryButton from "../../components/button/PrimaryButton";
 import {
   primaryColor,
   secondaryColor,

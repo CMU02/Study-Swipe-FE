@@ -24,7 +24,10 @@ const Logo = styled.Image`
 
 export default function BrandHeader({ onPressLogo }: BrandHeaderProps) {
   const logo = (
-    <Logo source={require("../assets/images/logo.png")} resizeMode="contain" />
+    <Logo
+      source={require("../../assets/images/logo.png")}
+      resizeMode="contain"
+    />
   );
 
   return (

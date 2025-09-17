@@ -1,7 +1,8 @@
 import { useState } from "react";
-import BrandTextField from "../../components/BrandTextField";
+import BrandTextField from "../../components/input/BrandTextField";
 import styled from "styled-components/native";
-import PrimaryButton from "../../components/PrimaryButton";
+import PrimaryButton from "../../components/button/PrimaryButton";
+import { clickColor } from "../../styles/Color";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -79,7 +80,11 @@ export default function UseSetting_Brith() {
         </Answer>
       </Top>
       <Bottom>
-        <PrimaryButton title={"다음"} disabled={isValidAge} />
+        <PrimaryButton
+          title={"다음"}
+          disabled={isValidAge}
+          bgColor={clickColor}
+        />
       </Bottom>
     </Container>
   );

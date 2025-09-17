@@ -1,7 +1,7 @@
 import { useState } from "react";
-import BrandTextField from "../../components/BrandTextField";
+import BrandTextField from "../../components/input/BrandTextField";
 import styled from "styled-components/native";
-import PrimaryButton from "../../components/PrimaryButton";
+import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
 
 const Container = styled.SafeAreaView`
@@ -40,9 +40,13 @@ const Answer = styled.View`
 `;
 
 export default function UseSetting_Period() {
+  // 선호시간, 시작 시간
   const [startTime, setStartTime] = useState<string>("");
+  // 선호시간, 마침 시간
   const [endTime, setEndTime] = useState<string>("");
+  // 주에 몇 회 진행하는지 선호기간
   const [startPeriod, setStartPeriod] = useState<string>("");
+  // 주에 N회를 몇 개월 동안 진행하는지 선호개월
   const [endPeriod, setEndPeriod] = useState<string>("");
 
   return (
@@ -58,22 +62,22 @@ export default function UseSetting_Period() {
             returnKeyType="next"
           />
           <BrandTextField
-            value={startTime}
-            onChangeText={setStartTime}
+            value={endTime}
+            onChangeText={setEndTime}
             placeholder="스터디를 마무리하기를 선호하는 시간을 입력해주세요."
             autoCapitalize="none"
             returnKeyType="next"
           />
           <BrandTextField
-            value={startTime}
-            onChangeText={setStartTime}
+            value={startPeriod}
+            onChangeText={setStartPeriod}
             placeholder="주에 몇 회 진행하는 것을 선호하시나요?"
             autoCapitalize="none"
             returnKeyType="next"
           />
           <BrandTextField
-            value={startTime}
-            onChangeText={setStartTime}
+            value={endPeriod}
+            onChangeText={setEndPeriod}
             placeholder="입력하신 횟수를 몇 개월 진행하시는 것을 선호하시나요?"
             autoCapitalize="none"
             returnKeyType="done"
