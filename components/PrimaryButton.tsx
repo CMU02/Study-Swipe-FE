@@ -1,8 +1,21 @@
 import styled from "styled-components/native";
-import { primaryColor } from "../styles/Color";
+import { clickColor, unClickColor } from "../styles/Color";
+
+interface PrimaryButtonProps {
+  // 버튼 글자
+  title: string;
+  // 버튼 색상
+  bgColor?: string;
+  // 버튼 글자 색상
+  textColor?: string;
+  onPress?: () => void;
+  // 비활성화 여부
+  disabled?: boolean;
+}
 
 interface ButtonProps {
   bgColor?: string;
+  disabled?: boolean;
 }
 
 interface LabelProps {
@@ -13,9 +26,19 @@ const Button = styled.TouchableOpacity<ButtonProps>`
   width: 100%;
   height: 50px;
   border-radius: 8px;
+
+  /** Shadow, IOS/Android **/
+  shadow-color: #000;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
+
   justify-content: center;
   align-items: center;
-  background-color: ${(props) => props.bgColor || primaryColor};
+
+  background-color: ${(props) =>
+    props.disabled ? unClickColor : props.bgColor || clickColor};
 `;
 
 const Label = styled.Text<LabelProps>`
@@ -24,21 +47,20 @@ const Label = styled.Text<LabelProps>`
   color: ${(props) => props.textColor || "#FFFFFF"};
 `;
 
-interface PrimaryButtonProps {
-  title: string;
-  bgColor?: string;
-  textColor?: string;
-  onPress?: () => void;
-}
-
 export default function PrimaryButton({
   title,
   bgColor,
   textColor,
   onPress,
+  disabled = false,
 }: PrimaryButtonProps) {
   return (
-    <Button bgColor={bgColor} activeOpacity={0.8} onPress={onPress}>
+    <Button
+      bgColor={bgColor}
+      activeOpacity={0.8}
+      onPress={onPress}
+      disabled={disabled}
+    >
       <Label textColor={textColor}>{title}</Label>
     </Button>
   );

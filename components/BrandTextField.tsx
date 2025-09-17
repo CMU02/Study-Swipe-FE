@@ -6,11 +6,16 @@ import { Feather } from "@expo/vector-icons";
 type ReturnKey = "done" | "go" | "next" | "search" | "send";
 
 interface AppTextFieldProps {
+  // 저장되는 값
   value: string;
   onChangeText: (t: string) => void;
+  // 입력창 위에 표시되는 값
   placeholder?: string;
+  // 모바일 키패드에 엔터 클릭 시 동작되는 방식 (완료, 다음, 검색 등)
   returnKeyType?: ReturnKey;
+  // 자동 대문자 설정 (첫글자 대문자 소문자 등등)
   autoCapitalize?: "none" | "sentences" | "words" | "characters";
+  // 키보드 타입 설정 (숫자패드 영문패드 등등)
   keyboardType?: React.ComponentProps<typeof StyledInput>["keyboardType"];
   /** true면 오른쪽에 '눈' 아이콘이 나타나고, 클릭으로 보이기/가리기 토글 */
   secureToggle?: boolean;
