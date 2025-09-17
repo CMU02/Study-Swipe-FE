@@ -1,22 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import styled from 'styled-components/native';
-
-const Container = styled.View`
-  flex: 1;
-  background-color: #FFF;
-  align-items: center;
-  justify-content: center;
-`
-const Title = styled.Text`
-  font-size: 40px;
-  font-weight: 700;
-`
+import React from "react";
+import { StatusBar } from "expo-status-bar";
+import { NavigationContainer } from "@react-navigation/native";
+import AppNavigator from "./navigation/AppNavigator";
 
 export default function App() {
   return (
-    <Container>
-      <StatusBar style="auto" />
-      <Title>Hello World</Title>
-    </Container>
+    <NavigationContainer>
+      <StatusBar hidden={true} />
+      <AppNavigator />
+    </NavigationContainer>
   );
 }
