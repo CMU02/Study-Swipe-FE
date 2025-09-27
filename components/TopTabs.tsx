@@ -1,31 +1,36 @@
-import { useEffect, useRef, useState } from "react";
-import { Animated, LayoutChangeEvent } from "react-native";
+import { useState } from "react";
+import { LayoutChangeEvent } from "react-native";
 import styled from "styled-components/native";
 
 const TabsRow = styled.View`
-  position: relative; /* 언더라인 절대배치 기준 */
+  position: relative;
   flex-direction: row;
   align-items: center;
   gap: 16px;
-  padding: 8px 16px 12px; /* 아래 여백으로 언더라인 공간 확보 */
+  padding: 8px 24px 4px;
 `;
 
 const TabBtn = styled.TouchableOpacity``;
 
+const TabInner = styled.View`
+  align-items: center; /* ⬅ 텍스트/언더라인 수평 중앙 */
+`;
+
 const TabText = styled.Text<{ active?: boolean }>`
-  font-size: 14px;
+  font-size: 20px;
   font-weight: ${({ active }) => (active ? 700 : 600)};
   color: #000;
   opacity: ${({ active }) => (active ? 1 : 0.55)};
 `;
 
-const Underline = styled(Animated.View)`
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
+const UnderlineItem = styled.View<{ visible: boolean; widthPx: number }>`
   height: 2px;
   background-color: #000;
   border-radius: 10px;
+  margin-top: 2px; /* 텍스트와의 간격 */
+  width: ${({ widthPx }) => `${Math.max(1, widthPx)}px`};
+  align-self: center; /* ⬅ 텍스트 하단 ‘가운데’ 정렬 */
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
 `;
 
 export interface TopTabItem {
@@ -40,6 +45,8 @@ export interface TopTabsProps {
   activeKey: string;
   onChange: (key: string) => void;
   showUnderline?: boolean;
+  /** 텍스트 폭 대비 언더라인 폭 비율 (0~1), 기본 1 = 텍스트와 동일 폭 */
+  underlineRatio?: number;
 }
 
 export default function TopTabs({
@@ -47,72 +54,48 @@ export default function TopTabs({
   activeKey,
   onChange,
   showUnderline = true,
+  underlineRatio = 1,
 }: TopTabsProps) {
-  const [layouts, setLayouts] = useState<
-    Record<string, { x: number; w: number }>
-  >({});
-  const underlineX = useRef(new Animated.Value(0)).current;
-  const underlineW = useRef(new Animated.Value(0)).current;
+  // 각 탭 텍스트의 측정 폭 저장
+  const [layouts, setLayouts] = useState<Record<string, number>>({});
 
   const onLayoutTab = (key: string) => (e: LayoutChangeEvent) => {
-    const { x, width } = e.nativeEvent.layout;
-    setLayouts((prev) => ({ ...prev, [key]: { x, w: width } }));
+    const { width } = e.nativeEvent.layout;
+    setLayouts((prev) =>
+      prev[key] === width ? prev : { ...prev, [key]: width }
+    );
   };
-
-  // 활성 탭 변경 시 언더라인 이동 + 폭 변경
-  useEffect(() => {
-    const m = layouts[activeKey];
-    if (!m) return;
-
-    Animated.parallel([
-      Animated.timing(underlineX, {
-        toValue: m.x,
-        duration: 180,
-        useNativeDriver: false,
-      }),
-      Animated.timing(underlineW, {
-        toValue: m.w,
-        duration: 180,
-        useNativeDriver: false, // width는 네이티브 드라이버 불가
-      }),
-    ]).start();
-  }, [activeKey, layouts]);
-
-  // 초기 위치/폭 세팅
-  useEffect(() => {
-    const first = items[0]?.key;
-    if (!first || !layouts[first]) return;
-    const { x, w } = layouts[first];
-    underlineX.setValue(x);
-    underlineW.setValue(w);
-  }, [items, layouts]);
 
   return (
     <TabsRow>
       {items.map((it) => {
         const active = it.key === activeKey;
+        const textW = layouts[it.key] ?? 0;
+        const underlineW = textW * underlineRatio;
+
         return (
           <TabBtn
             key={it.key}
             accessibilityRole="button"
             accessibilityLabel={it.accessibilityLabel ?? it.label}
             testID={it.testID ?? `top-tab-${it.key}`}
-            onLayout={onLayoutTab(it.key)}
             onPress={() => onChange(it.key)}
           >
-            <TabText active={active}>{it.label}</TabText>
+            <TabInner>
+              <TabText active={active} onLayout={onLayoutTab(it.key)}>
+                {it.label}
+              </TabText>
+
+              {showUnderline && (
+                <UnderlineItem
+                  visible={active && underlineW > 0}
+                  widthPx={underlineW}
+                />
+              )}
+            </TabInner>
           </TabBtn>
         );
       })}
-
-      {showUnderline && (
-        <Underline
-          style={{
-            width: underlineW,
-            transform: [{ translateX: underlineX }],
-          }}
-        />
-      )}
     </TabsRow>
   );
 }

@@ -6,7 +6,7 @@ import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { StackList } from "../../navigation/AppNavigator";
+import { UserSettingStackList } from "../../navigation/UserSettingNavi";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -48,7 +48,7 @@ const NameFieldBox = styled.View`
 `;
 
 export default function UseSetting_Name() {
-  // const navi = useNavigation<NativeStackNavigationProp<StackList>>();
+  const navi = useNavigation<NativeStackNavigationProp<UserSettingStackList>>();
   // 이름 값 저장
   const [userName, setUserName] = useState("");
   // 성별 값 저장
@@ -63,9 +63,9 @@ export default function UseSetting_Name() {
   };
 
   // Navigation 설정 테스트 진행한 부분 주석처리
-  // const goNextUseSetting = () => {
-  //   navi.navigate("BrithSetting");
-  // };
+  const goNextUserSetting = () => {
+    navi.navigate("BrithSetting");
+  };
 
   return (
     <Container>
@@ -98,7 +98,7 @@ export default function UseSetting_Name() {
           title="다음"
           bgColor={clickColor}
           disabled={!isValidInput()}
-          // onPress={goNextUseSetting}
+          onPress={goNextUserSetting}
         />
       </Bottom>
     </Container>

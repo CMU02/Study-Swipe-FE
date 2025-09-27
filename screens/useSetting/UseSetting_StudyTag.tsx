@@ -3,6 +3,9 @@ import BrandTextField from "../../components/input/BrandTextField";
 import styled from "styled-components/native";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UserSettingStackList } from "../../navigation/UserSettingNavi";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -48,12 +51,22 @@ const Answer = styled.View`
 `;
 
 export default function UseSetting_StudyTag() {
+  const navi = useNavigation<NativeStackNavigationProp<UserSettingStackList>>();
   // 1번부터 차례대로 우선순위 높은 순
   const [tag1, setTag1] = useState<string>("");
   const [tag2, setTag2] = useState<string>("");
   const [tag3, setTag3] = useState<string>("");
   const [tag4, setTag4] = useState<string>("");
   const [tag5, setTag5] = useState<string>("");
+
+  const areTagsValid = () => {
+    return [tag1, tag2, tag3, tag4, tag5].every((tag) => tag.trim().length > 0);
+  };
+
+  const goNextUserSetting = () => {
+    // 원래는 설문 페이지로 이동 예정 현재만 임시로 건너뜀
+    navi.navigate("StudyStyleSetting");
+  };
 
   return (
     <Container>
@@ -102,7 +115,12 @@ export default function UseSetting_StudyTag() {
         </Answer>
       </Top>
       <Bottom>
-        <PrimaryButton title="다음" bgColor={clickColor} />
+        <PrimaryButton
+          title="다음"
+          bgColor={clickColor}
+          disabled={!areTagsValid()}
+          onPress={goNextUserSetting}
+        />
       </Bottom>
     </Container>
   );
