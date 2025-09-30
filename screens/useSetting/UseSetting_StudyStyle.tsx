@@ -3,6 +3,9 @@ import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
 import StylePickButton from "../../components/button/StylePickButton";
 import { use, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UserSettingStackList } from "../../navigation/UserSettingNavi";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -40,10 +43,15 @@ const Answer = styled.View`
 `;
 
 export default function UseSetting_StudyStyle() {
+  const navi = useNavigation<NativeStackNavigationProp<UserSettingStackList>>();
   // 선호인원
   const [peopleNumber, setPeopleNumber] = useState<string>("1~2인");
   // 학습 스타일
   const [studyStyle, setStudyStyle] = useState<string>("멘토");
+
+  const goNextUserSetting = () => {
+    navi.navigate("AdditionalSetting");
+  };
 
   return (
     <Container>
@@ -69,7 +77,11 @@ export default function UseSetting_StudyStyle() {
         </Answer>
       </Top>
       <Bottom>
-        <PrimaryButton title="다음" bgColor={clickColor} />
+        <PrimaryButton
+          title="다음"
+          bgColor={clickColor}
+          onPress={goNextUserSetting}
+        />
       </Bottom>
     </Container>
   );

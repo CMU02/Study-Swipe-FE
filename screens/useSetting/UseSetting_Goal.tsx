@@ -3,6 +3,9 @@ import BrandTextField from "../../components/input/BrandTextField";
 import styled from "styled-components/native";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UserSettingStackList } from "../../navigation/UserSettingNavi";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -39,11 +42,16 @@ const Answer = styled.View`
 `;
 
 export default function UseSetting_Goal() {
+  const navi = useNavigation<NativeStackNavigationProp<UserSettingStackList>>();
   // 목표에 대한 값 저장
   const [goal, setGoal] = useState<string>("");
   // 빈 값인지 체크하는 함수
   const isGoalEmpty = () => {
     return goal.trim().length === 0;
+  };
+
+  const goNextUserSetting = () => {
+    navi.navigate("StudyTagSetting");
   };
 
   return (
@@ -65,6 +73,7 @@ export default function UseSetting_Goal() {
           title="다음"
           bgColor={clickColor}
           disabled={isGoalEmpty()}
+          onPress={goNextUserSetting}
         />
       </Bottom>
     </Container>

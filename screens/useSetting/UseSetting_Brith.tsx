@@ -3,6 +3,9 @@ import BrandTextField from "../../components/input/BrandTextField";
 import styled from "styled-components/native";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UserSettingStackList } from "../../navigation/UserSettingNavi";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -39,6 +42,7 @@ const Answer = styled.View`
 `;
 
 export default function UseSetting_Brith() {
+  const navi = useNavigation<NativeStackNavigationProp<UserSettingStackList>>();
   // 사용자로부터 받아오는 YYYY/MM/DD 형태의 입력값
   const [birthDate, setBirthDate] = useState<string>("");
   // 받아온 입력 값으로부터 계산한 나이 값
@@ -65,6 +69,10 @@ export default function UseSetting_Brith() {
 
   console.log(age);
 
+  const goNextUserSetting = () => {
+    navi.navigate("CollegeSetting");
+  };
+
   return (
     <Container>
       <Top>
@@ -84,6 +92,7 @@ export default function UseSetting_Brith() {
           title={"다음"}
           disabled={isValidAge}
           bgColor={clickColor}
+          onPress={goNextUserSetting}
         />
       </Bottom>
     </Container>

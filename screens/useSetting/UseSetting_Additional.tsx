@@ -3,6 +3,9 @@ import StylePickButton from "../../components/button/StylePickButton";
 import { useState } from "react";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { secondaryColor } from "../../styles/Color";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UserSettingStackList } from "../../navigation/UserSettingNavi";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -40,9 +43,14 @@ const Answer = styled.View`
 `;
 
 export default function UseSetting_Additional() {
+  // const navi = useNavigation<NativeStackNavigationProp<UserSettingStackList>>();
   const [smoking, setSmoking] = useState<string>("흡연자");
   const [privateGathering, setPrivateGathering] =
     useState<string>("회식 등 팀 모임 선호");
+
+  // const goNextUserSetting = () => {
+  //   navi.navigate("")
+  // }
 
   return (
     <Container>

@@ -3,6 +3,9 @@ import styled from "styled-components/native";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor, secondaryColor, unClickColor } from "../../styles/Color";
 import Slider from "@react-native-community/slider"; // ← 슬라이더
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UserSettingStackList } from "../../navigation/UserSettingNavi";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -52,9 +55,14 @@ const ValueText = styled.Text`
 `;
 
 export default function UseSetting_Distance() {
+  const navi = useNavigation<NativeStackNavigationProp<UserSettingStackList>>();
   const [distance, setDistance] = useState<number>(25);
   const minKm = 1;
   const maxKm = 50;
+
+  const goNextUserSetting = () => {
+    navi.navigate("PeriodSetting");
+  };
 
   return (
     <Container>
@@ -84,7 +92,11 @@ export default function UseSetting_Distance() {
       </Top>
 
       <Bottom>
-        <PrimaryButton title="다음" bgColor={clickColor} />
+        <PrimaryButton
+          title="다음"
+          bgColor={clickColor}
+          onPress={goNextUserSetting}
+        />
       </Bottom>
     </Container>
   );

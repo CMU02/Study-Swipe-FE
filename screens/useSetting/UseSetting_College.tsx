@@ -3,6 +3,9 @@ import BrandTextField from "../../components/input/BrandTextField";
 import styled from "styled-components/native";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UserSettingStackList } from "../../navigation/UserSettingNavi";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -39,11 +42,17 @@ const Answer = styled.View`
 `;
 
 export default function UseSetting_College() {
+  const navi = useNavigation<NativeStackNavigationProp<UserSettingStackList>>();
   const [college, setCollege] = useState<string>("");
   // 정상적인 값이 들어갔는지 확인하는 함수 ("대학교" 단어가 들어있는지 판별)
   const hasUniversity = () => {
     return college.includes("대학교");
   };
+
+  const goNextUserSetting = () => {
+    navi.navigate("AreaSetting");
+  };
+
   return (
     <Container>
       <Top>
@@ -63,6 +72,7 @@ export default function UseSetting_College() {
           title="다음"
           bgColor={clickColor}
           disabled={!hasUniversity()}
+          onPress={goNextUserSetting}
         />
       </Bottom>
     </Container>

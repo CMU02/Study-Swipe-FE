@@ -4,6 +4,9 @@ import Select from "../../components/input/Select";
 import { useState } from "react";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor } from "../../styles/Color";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UserSettingStackList } from "../../navigation/UserSettingNavi";
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -46,10 +49,15 @@ const Answer = styled.View`
 `;
 
 export default function UseSetting_Area() {
+  const navi = useNavigation<NativeStackNavigationProp<UserSettingStackList>>();
   const [userArea_1, setUserArea_1] = useState<"서울특별시" | "경기도" | "">(
     ""
   );
   const [userArea_2, setUserArea_2] = useState<string>("");
+
+  const goNextUserSetting = () => {
+    navi.navigate("DistanceSetting");
+  };
 
   return (
     <Container>
@@ -77,7 +85,11 @@ export default function UseSetting_Area() {
         </Answer>
       </Top>
       <Bottom>
-        <PrimaryButton title="다음" bgColor={clickColor} />
+        <PrimaryButton
+          title="다음"
+          bgColor={clickColor}
+          onPress={goNextUserSetting}
+        />
       </Bottom>
     </Container>
   );
