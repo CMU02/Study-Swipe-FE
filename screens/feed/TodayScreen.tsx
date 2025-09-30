@@ -76,6 +76,23 @@ const CARDS = [
     description: "소개 : 간단한 프로젝트 함께 진행해보고 싶습니다.",
     showAlert: true,
     bookmarked: true,
+    details: {
+      purpose: "전공 공부 및 포트폴리오 작성",
+      school: "서울대학교 컴퓨터공학과",
+      location: "경기도 안양시",
+      time: "오후 7시 ~ 9시",
+      days: "주중",
+      freq: "주 2회, 3개월",
+      age: "만 23세/남",
+    },
+    badges: ["2~3인", "흡연자X", "피어", "같이 선호"],
+    tags: [
+      "#1 프론트엔드",
+      "#2 백엔드",
+      "#3 풀스택",
+      "#4 자바스크립트",
+      "#5 자료구조",
+    ],
   },
   {
     image: {
@@ -87,6 +104,17 @@ const CARDS = [
     description: "RN/Expo로 간단한 앱을 만드는 스터디",
     showAlert: false,
     bookmarked: false,
+    details: {
+      purpose: "React Native 앱 포트폴리오 제작",
+      school: "경희대학교 소프트웨어융합",
+      location: "서울시 동대문구",
+      time: "저녁 8시 ~ 10시",
+      days: "주중",
+      freq: "주 2회, 2개월",
+      age: "만 22~26세",
+    },
+    badges: ["3~4인", "비흡연", "프로젝트 위주"],
+    tags: ["#ReactNative", "#Expo", "#TypeScript", "#포트폴리오"],
   },
   {
     image: {
@@ -98,6 +126,17 @@ const CARDS = [
     description: "매주 5문제, 코드 리뷰 진행",
     showAlert: false,
     bookmarked: false,
+    details: {
+      purpose: "알고리즘 문제 풀이 및 PS 실력 향상",
+      school: "서강대학교 컴퓨터공학",
+      location: "서울시 마포구",
+      time: "오후 7시 ~ 9시",
+      days: "토/일",
+      freq: "주 2회, 3개월",
+      age: "무관",
+    },
+    badges: ["5인 이하", "코드리뷰", "실력향상"],
+    tags: ["#Greedy", "#DP", "#Graph", "#PS", "#코딩테스트"],
   },
 ];
 
@@ -202,7 +241,9 @@ const TodayScreen = () => {
                       description={c.description}
                       showAlert={c.showAlert}
                       bookmarked={c.bookmarked}
-                      mode="compact"
+                      details={c.details}
+                      badges={c.badges}
+                      tags={c.tags}
                     />
                   </Animated.View>
                 );

@@ -1,14 +1,32 @@
+import React, { useState } from "react";
 import styled from "styled-components/native";
 import {
   TouchableOpacity,
   ImageSourcePropType,
   ImageBackground,
   Dimensions,
+  View,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { textColor, thirdColor } from "../styles/Color";
+import {
+  clickColorOpacity,
+  secondaryColorOpacity,
+  textColor,
+  thirdColor,
+} from "../styles/Color";
 
 const { height: windowHeight } = Dimensions.get("window");
+
+/* ───────────── Types ───────────── */
+export interface StudyDetails {
+  purpose?: string; // 목적
+  school?: string; // 대학교/전공
+  location?: string; // 선호지역
+  time?: string; // 선호시간대
+  days?: string; // 선호요일대
+  freq?: string; // 선호 횟수
+  age?: string; // 나이
+}
 
 export interface StudyCardProps {
   image: ImageSourcePropType;
@@ -16,13 +34,19 @@ export interface StudyCardProps {
   subtitle: string;
   description?: string;
   smallLabel?: string;
-  tags?: string[];
   showAlert?: boolean;
   bookmarked?: boolean;
-  mode?: "compact" | "detail";
-  onPress?: () => void;
+
+  /** 뒷면 데이터 */
+  details?: StudyDetails; // 본문 항목들
+  badges?: string[]; // 상단 작은 칩들
+  tags?: string[]; // 해시태그 칩들
+
   style?: any;
 }
+
+/* ───────────── Styled ───────────── */
+const CARD_HEIGHT = windowHeight * 0.6;
 
 const CardPress = styled(TouchableOpacity)`
   width: 100%;
@@ -33,11 +57,21 @@ const CardBox = styled.View`
   overflow: hidden;
   border-radius: 8px;
   background-color: #fff;
+  height: ${CARD_HEIGHT}px;
 `;
 
 const Cover = styled(ImageBackground)`
   width: 100%;
-  height: ${windowHeight * 0.6}px;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+`;
+
+const BackRoot = styled.View`
+  width: 100%;
+  height: 100%;
+  background: ${thirdColor};
+  border-radius: 8px;
 `;
 
 const BadgeTopRight = styled.View`
@@ -55,6 +89,13 @@ const BadgeIcon = styled.View`
   background: ${thirdColor};
   align-items: center;
   justify-content: center;
+
+  /* 살짝 띄워주기 */
+  shadow-color: #000;
+  shadow-opacity: 0.1;
+  shadow-radius: 6px;
+  shadow-offset: 0px 3px;
+  elevation: 3;
 `;
 
 const CaptionWrap = styled.View`
@@ -65,6 +106,13 @@ const CaptionWrap = styled.View`
   border-radius: 14px;
   background: #fff;
   padding: 14px 14px 16px;
+
+  /* ✅ 캡션 박스 그림자 */
+  shadow-color: #000;
+  shadow-opacity: 0.14;
+  shadow-radius: 10px;
+  shadow-offset: 0px 4px;
+  elevation: 4;
 `;
 
 const TitleRow = styled.View`
@@ -81,6 +129,7 @@ const TitleText = styled.Text`
   color: ${textColor};
 `;
 
+// 협업 성향 (멘토 / 러너 / 피어)
 const SmallLabel = styled.Text`
   padding: 2px 10px;
   border-radius: 999px;
@@ -90,97 +139,178 @@ const SmallLabel = styled.Text`
   color: ${textColor};
 `;
 
+// 학교 + 전공
 const SubText = styled.Text`
   margin-top: 6px;
   font-size: 13px;
   color: ${textColor};
 `;
 
+// 소개
 const DescText = styled.Text`
   margin-top: 6px;
   font-size: 12px;
   color: ${textColor};
 `;
 
-const TagRow = styled.View`
+const BackScroll = styled.ScrollView.attrs({
+  contentContainerStyle: { padding: 16 },
+})`
+  flex: 1;
+`;
+
+const BackHeader = styled.Text`
+  font-size: 20px;
+  font-weight: 800;
+  color: ${textColor};
+  margin-bottom: 12px;
+`;
+
+// 상세 정보
+const Line = styled.Text`
+  font-size: 13px;
+  color: ${textColor};
+  line-height: 20px;
+  margin-bottom: 2px;
+`;
+
+const ChipsRow = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 8px;
+  margin-top: 12px;
 `;
 
-const TagChip = styled.Text`
+// 상단 태그 (Warm Coral)
+const ChipBox = styled.View`
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: ${secondaryColorOpacity};
+
+  shadow-color: #000;
+  shadow-opacity: 0.12;
+  shadow-radius: 6px;
+  shadow-offset: 0px 3px;
+  elevation: 3;
+`;
+
+const ChipText = styled.Text`
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+`;
+
+// 하단 태그 (Mint Green)
+const TagChipBox = styled.View`
   padding: 4px 8px;
   border-radius: 8px;
-  background: ${thirdColor};
-  font-size: 11px;
-  color: ${textColor};
+  background: ${clickColorOpacity};
+
+  shadow-color: #000;
+  shadow-opacity: 0.1;
+  shadow-radius: 5px;
+  shadow-offset: 0px 2px;
+  elevation: 2;
 `;
 
+const TagChipText = styled.Text`
+  font-size: 11px;
+  color: #fff;
+`;
+
+/* ───────────── Component ───────────── */
 export default function StudyCard({
   image,
   title,
   subtitle,
   description,
   smallLabel,
-  tags,
   showAlert,
   bookmarked,
-  mode = "compact",
-  onPress,
+  details,
+  badges,
+  tags,
   style,
 }: StudyCardProps) {
-  const body = (
-    <CardBox style={style}>
-      <Cover source={image} resizeMode="cover">
-        {/* 상단 배지 */}
-        <BadgeTopRight>
-          {showAlert && (
-            <BadgeIcon>
-              <Feather name="alert-triangle" size={15} color="#e11d48" />
-            </BadgeIcon>
-          )}
-          <BadgeIcon>
-            <Feather
-              name="star"
-              size={15}
-              color={bookmarked ? "#f59e0b" : "#111"}
-            />
-          </BadgeIcon>
-        </BadgeTopRight>
+  const [flipped, setFlipped] = useState(false);
 
-        {/* 하단 캡션 */}
-        <CaptionWrap>
-          <TitleRow>
-            <TitleText numberOfLines={1}>{title}</TitleText>
-            {!!smallLabel && <SmallLabel>{smallLabel}</SmallLabel>}
-          </TitleRow>
+  const handlePress = () => {
+    setFlipped((v) => !v);
+  };
 
-          <SubText numberOfLines={1}>{subtitle}</SubText>
+  return (
+    <CardPress activeOpacity={0.9} onPress={handlePress}>
+      <CardBox style={style}>
+        {flipped ? (
+          /* ───── Back (상세) ───── */
+          <BackRoot>
+            <BackScroll>
+              <BackHeader>스터디 상세 정보</BackHeader>
 
-          {!!description && (
-            <DescText numberOfLines={mode === "compact" ? 2 : 3}>
-              {description}
-            </DescText>
-          )}
+              {details?.purpose && <Line>목적 : {details.purpose}</Line>}
+              {details?.school && <Line>대학교/전공 : {details.school}</Line>}
+              {details?.location && <Line>선호지역 : {details.location}</Line>}
+              {details?.time && <Line>선호시간대 : {details.time}</Line>}
+              {details?.days && <Line>선호요일대 : {details.days}</Line>}
+              {details?.freq && <Line>선호 횟수 : {details?.freq}</Line>}
+              {details?.age && <Line>나이 : {details.age}</Line>}
 
-          {mode === "detail" && !!tags?.length && (
-            <TagRow>
-              {tags.map((t, i) => (
-                <TagChip key={`${t}-${i}`}>{t}</TagChip>
-              ))}
-            </TagRow>
-          )}
-        </CaptionWrap>
-      </Cover>
-    </CardBox>
-  );
+              {!!badges?.length && (
+                <ChipsRow>
+                  {badges.map((b, i) => (
+                    <ChipBox key={`${b}-${i}`}>
+                      <ChipText>{b}</ChipText>
+                    </ChipBox>
+                  ))}
+                </ChipsRow>
+              )}
 
-  return onPress ? (
-    <CardPress activeOpacity={0.9} onPress={onPress}>
-      {body}
+              {!!tags?.length && (
+                <ChipsRow>
+                  {tags.map((t, i) => (
+                    <TagChipBox key={`${t}-${i}`}>
+                      <TagChipText>{t}</TagChipText>
+                    </TagChipBox>
+                  ))}
+                </ChipsRow>
+              )}
+
+              <View style={{ height: 8 }} />
+            </BackScroll>
+          </BackRoot>
+        ) : (
+          /* ───── Front (커버) ───── */
+          <Cover source={image} resizeMode="cover">
+            <BadgeTopRight>
+              {showAlert && (
+                <BadgeIcon>
+                  <Feather name="alert-triangle" size={15} color="#e11d48" />
+                </BadgeIcon>
+              )}
+              <BadgeIcon>
+                <Feather
+                  name="star"
+                  size={15}
+                  color={bookmarked ? "#f59e0b" : "#111"}
+                />
+              </BadgeIcon>
+            </BadgeTopRight>
+
+            <CaptionWrap>
+              <TitleRow>
+                <TitleText numberOfLines={1}>{title}</TitleText>
+                {!!smallLabel && <SmallLabel>{smallLabel}</SmallLabel>}
+              </TitleRow>
+
+              <SubText numberOfLines={1}>{subtitle}</SubText>
+
+              {!!description && (
+                <DescText numberOfLines={2}>{description}</DescText>
+              )}
+            </CaptionWrap>
+          </Cover>
+        )}
+      </CardBox>
     </CardPress>
-  ) : (
-    body
   );
 }

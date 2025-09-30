@@ -5,16 +5,13 @@ import AppNavigator from "./navigation/AppNavigator";
 import UserSettingNavi from "./navigation/UserSettingNavi";
 
 export default function App() {
+  // 테스트용 토글: true면 UserSettingNavi, false면 AppNavigator
+  const USE_USER_SETTING = false;
+
   return (
     <NavigationContainer>
       <StatusBar hidden={true} />
-      <AppNavigator />
+      {USE_USER_SETTING ? <UserSettingNavi /> : <AppNavigator />}
     </NavigationContainer>
-
-    // UserSetting 부분 테스트 진행
-    // <NavigationContainer>
-    //   <StatusBar hidden={true} />
-    //   <UserSettingNavi />
-    // </NavigationContainer>
   );
 }
