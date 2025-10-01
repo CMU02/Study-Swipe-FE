@@ -49,7 +49,7 @@ const Badge = styled.View`
 const BadgeText = styled.Text`
   color: #fff;
   font-size: 10px;
-  font-weight: 700;
+  font-family: "Paperlogy-SemiBold";
 `;
 
 /** 중첩 네비게이터의 최하위 활성 라우트 이름 추출 */

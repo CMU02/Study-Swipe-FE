@@ -26,7 +26,7 @@ const Container = styled.View`
 
 const Title = styled.Text`
   font-size: 40px;
-  font-weight: 600;
+  font-family: "Paperlogy-SemiBold";
   margin: 16px 0 20px;
   color: #000;
 `;
@@ -48,13 +48,13 @@ const LinksRow = styled.View`
 
 const LinkText = styled.Text`
   font-size: 12px;
-  font-weight: 600;
+  font-family: "Paperlogy-SemiBold";
   color: #000;
 `;
 
 const Divider = styled.Text`
   font-size: 12px;
-  font-weight: 600;
+  font-family: "Paperlogy-SemiBold";
   color: #000;
   opacity: 0.5;
 `;

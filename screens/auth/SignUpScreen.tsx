@@ -26,7 +26,7 @@ const Container = styled.View`
 
 const Title = styled.Text`
   font-size: 40px;
-  font-weight: 600;
+  font-family: "Paperlogy-SemiBold";
   margin: 16px 0 20px;
   color: #000;
 `;

@@ -54,7 +54,7 @@ const StyledInput = styled.TextInput<{
   $padRight: number; // 오른쪽에 아이콘/버튼 있을 때 padding-right 가변
 }>`
   font-size: 15px;
-  font-weight: 600;
+  font-family: "Paperlogy-SemiBold";
   width: 100%;
   height: 48px;
   padding: 0 ${({ $padRight }) => $padRight}px 0 14px;
@@ -90,7 +90,7 @@ const RightBtn = styled.TouchableOpacity<{ $bg: string; disabled?: boolean }>`
 
 const RightBtnText = styled.Text`
   color: #fff;
-  font-weight: 800;
+  font-family: "Paperlogy-SemiBold";
   font-size: 14px;
 `;
 
@@ -102,7 +102,7 @@ const InlineRightText = styled.Text<{ $color: string }>`
   bottom: 0;
   text-align-vertical: center;
   font-size: 12px;
-  font-weight: 800;
+  font-family: "Paperlogy-SemiBold";
   color: ${({ $color }) => $color};
 `;
 

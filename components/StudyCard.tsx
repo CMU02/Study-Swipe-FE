@@ -125,7 +125,7 @@ const TitleRow = styled.View`
 const TitleText = styled.Text`
   flex: 1;
   font-size: 20px;
-  font-weight: 800;
+  font-family: "Paperlogy-SemiBold";
   color: ${textColor};
 `;
 
@@ -135,7 +135,7 @@ const SmallLabel = styled.Text`
   border-radius: 999px;
   background: #f1f3f5;
   font-size: 12px;
-  font-weight: 700;
+  font-family: "Paperlogy-SemiBold";
   color: ${textColor};
 `;
 
@@ -143,6 +143,7 @@ const SmallLabel = styled.Text`
 const SubText = styled.Text`
   margin-top: 6px;
   font-size: 13px;
+  font-family: "Paperlogy-SemiBold";
   color: ${textColor};
 `;
 
@@ -150,6 +151,7 @@ const SubText = styled.Text`
 const DescText = styled.Text`
   margin-top: 6px;
   font-size: 12px;
+  font-family: "Paperlogy-SemiBold";
   color: ${textColor};
 `;
 
@@ -161,7 +163,7 @@ const BackScroll = styled.ScrollView.attrs({
 
 const BackHeader = styled.Text`
   font-size: 20px;
-  font-weight: 800;
+  font-family: "Paperlogy-SemiBold";
   color: ${textColor};
   margin-bottom: 12px;
 `;
@@ -169,6 +171,7 @@ const BackHeader = styled.Text`
 // 상세 정보
 const Line = styled.Text`
   font-size: 13px;
+  font-family: "Paperlogy-SemiBold";
   color: ${textColor};
   line-height: 20px;
   margin-bottom: 2px;
@@ -196,7 +199,7 @@ const ChipBox = styled.View`
 
 const ChipText = styled.Text`
   font-size: 12px;
-  font-weight: 700;
+  font-family: "Paperlogy-SemiBold";
   color: #fff;
 `;
 
@@ -215,6 +218,7 @@ const TagChipBox = styled.View`
 
 const TagChipText = styled.Text`
   font-size: 11px;
+  font-family: "Paperlogy-SemiBold";
   color: #fff;
 `;
 
@@ -287,13 +291,15 @@ export default function StudyCard({
                   <Feather name="alert-triangle" size={15} color="#e11d48" />
                 </BadgeIcon>
               )}
-              <BadgeIcon>
-                <Feather
-                  name="star"
-                  size={15}
-                  color={bookmarked ? "#f59e0b" : "#111"}
-                />
-              </BadgeIcon>
+              {showAlert && (
+                <BadgeIcon>
+                  <Feather
+                    name="star"
+                    size={15}
+                    color={bookmarked ? "#f59e0b" : "#111"}
+                  />
+                </BadgeIcon>
+              )}
             </BadgeTopRight>
 
             <CaptionWrap>
