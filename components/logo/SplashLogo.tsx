@@ -9,11 +9,11 @@ const Container = styled.View`
 
 const TagLine = styled.Text`
   font-size: 30px;
-  font-weight: 600;
   line-height: 35px;
   color: ${textColor};
   text-align: center;
   margin-bottom: 15px;
+  font-family: "Paperlogy-SemiBold";
 `;
 
 const Logo = styled.Image`

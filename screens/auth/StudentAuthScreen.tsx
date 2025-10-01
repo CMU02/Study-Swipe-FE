@@ -13,7 +13,7 @@ import { TouchableOpacity, Modal } from "react-native";
 
 /* ----------------- Layout ----------------- */
 
-const Screen = styled.SafeAreaView`
+const Screen = styled.View`
   flex: 1;
   background-color: #fff;
 `;

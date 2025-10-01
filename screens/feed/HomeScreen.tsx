@@ -10,10 +10,9 @@ import BrandHeader from "../../components/logo/BrandHeader";
 import StudyCard from "../../components/StudyCard";
 import BottomTabBar from "../../components/BottomTabBar";
 import TopTabs from "../../components/TopTabs";
-import { textColor, unClickColor } from "../../styles/Color";
 
 /* ───────────── Styled ───────────── */
-const Screen = styled.SafeAreaView`
+const Screen = styled.View`
   flex: 1;
   background-color: #fff;
 `;
@@ -23,37 +22,22 @@ const Wrap = styled.View`
 `;
 
 const Container = styled.View`
-  padding: 0 16px;
+  flex: 1;
 `;
 
 const CarouselWrap = styled.View`
-  width: 100%;
-  margin-top: 8px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 `;
 
 const HScroll = styled(Animated.ScrollView).attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
   scrollEventThrottle: 16,
-})``;
-
-const Dots = styled.View`
+})`
   width: 100%;
-  padding: 8px 0;
-  align-items: center;
-  justify-content: center;
-`;
-
-const DotRow = styled.View`
-  flex-direction: row;
-  gap: 6px;
-`;
-
-const Dot = styled.View<{ active?: boolean }>`
-  width: ${({ active }) => (active ? 6 : 5)}px;
-  height: ${({ active }) => (active ? 6 : 5)}px;
-  border-radius: 50px;
-  background-color: ${({ active }) => (active ? textColor : unClickColor)};
+  height: 100%;
 `;
 
 /* ───────────── Constants ───────────── */
@@ -169,6 +153,8 @@ const TodayScreen = () => {
     [itemStride]
   );
 
+  const centerGap = (width - cardWidth) / 2;
+
   return (
     <Screen>
       <BrandHeader />
@@ -185,17 +171,18 @@ const TodayScreen = () => {
           <CarouselWrap>
             <HScroll
               snapToInterval={itemStride}
-              snapToAlignment="start"
+              decelerationRate="fast"
               onMomentumScrollEnd={onMomentumEnd}
               onScroll={Animated.event(
                 [{ nativeEvent: { contentOffset: { x: scrollX } } }],
                 { useNativeDriver: true }
               )}
               contentContainerStyle={{
-                paddingTop: 24,
-                paddingBottom: 24,
-                paddingLeft: horizontalPadding,
-                paddingRight: horizontalPadding + peekRight,
+                flexGrow: 1,
+                alignItems: "center",
+                paddingLeft: centerGap,
+                paddingRight: centerGap, // ← +peekRight 빼기
+                paddingVertical: 24,
               }}
             >
               {CARDS.map((c, i) => {
@@ -249,14 +236,6 @@ const TodayScreen = () => {
                 );
               })}
             </HScroll>
-
-            <Dots>
-              <DotRow>
-                {CARDS.map((_, i) => (
-                  <Dot key={i} active={i === page} />
-                ))}
-              </DotRow>
-            </Dots>
           </CarouselWrap>
         </Container>
       </Wrap>

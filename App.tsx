@@ -1,4 +1,5 @@
 import React from "react";
+import FontLoader from "./FontLoader";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigator from "./navigation/AppNavigator";
@@ -9,9 +10,11 @@ export default function App() {
   const USE_USER_SETTING = false;
 
   return (
-    <NavigationContainer>
-      <StatusBar hidden={true} />
-      {USE_USER_SETTING ? <UserSettingNavi /> : <AppNavigator />}
-    </NavigationContainer>
+    <FontLoader>
+      <NavigationContainer>
+        <StatusBar hidden={true} />
+        {USE_USER_SETTING ? <UserSettingNavi /> : <AppNavigator />}
+      </NavigationContainer>
+    </FontLoader>
   );
 }
