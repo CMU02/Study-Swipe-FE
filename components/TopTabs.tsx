@@ -18,7 +18,7 @@ const TabInner = styled.View`
 
 const TabText = styled.Text<{ active?: boolean }>`
   font-size: 20px;
-  font-weight: ${({ active }) => (active ? 700 : 600)};
+  font-family: "Paperlogy-SemiBold";
   color: #000;
   opacity: ${({ active }) => (active ? 1 : 0.55)};
 `;

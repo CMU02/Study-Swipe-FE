@@ -8,13 +8,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackList } from "../../navigation/AppNavigator";
 import BrandTextField from "../../components/input/BrandTextField";
 
-const Screen = styled.SafeAreaView`
+const Screen = styled.View`
   flex: 1;
   background-color: #fff;
 `;
 
 const Wrap = styled.ScrollView.attrs({
-  contentContainerStyle: { paddingTop: 24, paddingBottom: 32 }, // ⬅️ 상단 여백만 지정
+  contentContainerStyle: { paddingTop: 24, paddingBottom: 32 },
   keyboardShouldPersistTaps: "handled",
 })`
   flex: 1;
@@ -26,7 +26,7 @@ const Container = styled.View`
 
 const Title = styled.Text`
   font-size: 40px;
-  font-weight: 600;
+  font-family: "Paperlogy-SemiBold";
   margin: 16px 0 20px;
   color: #000;
 `;
@@ -48,13 +48,13 @@ const LinksRow = styled.View`
 
 const LinkText = styled.Text`
   font-size: 12px;
-  font-weight: 600;
+  font-family: "Paperlogy-SemiBold";
   color: #000;
 `;
 
 const Divider = styled.Text`
   font-size: 12px;
-  font-weight: 600;
+  font-family: "Paperlogy-SemiBold";
   color: #000;
   opacity: 0.5;
 `;

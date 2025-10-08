@@ -13,7 +13,7 @@ import { TouchableOpacity, Modal } from "react-native";
 
 /* ----------------- Layout ----------------- */
 
-const Screen = styled.SafeAreaView`
+const Screen = styled.View`
   flex: 1;
   background-color: #fff;
 `;
@@ -32,7 +32,7 @@ const Container = styled.View`
 
 const Title = styled.Text`
   font-size: 28px;
-  font-weight: 800;
+  font-family: "Paperlogy-SemiBold";
   line-height: 36px;
   color: #000;
   margin-bottom: 20px;
@@ -76,7 +76,7 @@ const SheetHeader = styled.View`
 
 const SheetTitle = styled.Text`
   font-size: 18px;
-  font-weight: 800;
+  font-family: "Paperlogy-SemiBold";
   color: #000;
 `;
 
@@ -86,6 +86,7 @@ const CloseBtn = styled.TouchableOpacity`
 
 const CloseText = styled.Text`
   font-size: 18px;
+  font-family: "Paperlogy-SemiBold";
   color: #000;
 `;
 
@@ -115,6 +116,7 @@ const Circle = styled.View<{ checked?: boolean }>`
 const TermLabel = styled.Text`
   color: #000;
   font-size: 14px;
+  font-family: "Paperlogy-SemiBold";
 `;
 
 const ViewBtn = styled(TouchableOpacity)`
@@ -123,7 +125,7 @@ const ViewBtn = styled(TouchableOpacity)`
 
 const ViewText = styled.Text`
   color: ${textOpacityColor};
-  font-weight: 700;
+  font-family: "Paperlogy-SemiBold";
 `;
 
 const SheetPrimaryBtnWrap = styled.View`

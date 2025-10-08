@@ -90,7 +90,7 @@ const RightBtn = styled.TouchableOpacity<{ $bg: string; disabled?: boolean }>`
 
 const RightBtnText = styled.Text`
   color: #fff;
-  font-weight: 800;
+  font-family: "Paperlogy-SemiBold";
   font-size: 14px;
 `;
 
@@ -102,7 +102,7 @@ const InlineRightText = styled.Text<{ $color: string }>`
   bottom: 0;
   text-align-vertical: center;
   font-size: 12px;
-  font-weight: 800;
+  font-family: "Paperlogy-SemiBold";
   color: ${({ $color }) => $color};
 `;
 
