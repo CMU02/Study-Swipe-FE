@@ -51,7 +51,7 @@ const Trigger = styled.TouchableOpacity`
 
 const TriggerText = styled.Text`
   font-size: 15px;
-  font-weight: 600;
+  font-family: Paperlogy-SemiBold;
   color: ${textOpacityColor};
 `;
 
@@ -83,6 +83,7 @@ const Option = styled.TouchableOpacity`
 
 const OptionText = styled.Text`
   font-size: 15px;
+  font-family: Paperlogy-SemiBold;
   color: ${textOpacityColor};
 `;
 

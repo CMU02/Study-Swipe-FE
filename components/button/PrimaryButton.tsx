@@ -43,7 +43,7 @@ const Button = styled.TouchableOpacity<ButtonProps>`
 
 const Label = styled.Text<LabelProps>`
   font-size: 20px;
-  font-weight: 700;
+  font-family: Paperlogy-SemiBold;
   color: ${(props) => props.textColor || "#FFFFFF"};
 `;
 

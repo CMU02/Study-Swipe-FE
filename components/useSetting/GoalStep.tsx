@@ -1,0 +1,55 @@
+import React from "react";
+import styled from "styled-components/native";
+import BrandTextField from "../input/BrandTextField";
+import { UserSettingData } from "./NameStep";
+
+const Container = styled.View`
+  flex: 1;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 14px;
+`;
+
+const Question = styled.Text`
+  font-size: 35px;
+  font-family: Paperlogy-SemiBold;
+  margin-bottom: 40px;
+  align-self: stretch;
+`;
+
+const Answer = styled.View`
+  align-self: stretch;
+`;
+
+interface GoalStepProps {
+  data: UserSettingData;
+  onDataChange: (data: Partial<UserSettingData>) => void;
+  onValidationChange: (isValid: boolean) => void;
+}
+
+export default function GoalStep({
+  data,
+  onDataChange,
+  onValidationChange,
+}: GoalStepProps) {
+  const handleGoalChange = (goal: string) => {
+    onDataChange({ goal });
+    const isGoalEmpty = goal.trim().length === 0;
+    onValidationChange(!isGoalEmpty);
+  };
+
+  return (
+    <Container>
+      <Question>스터디의 목적이{"\n"}무엇인가요?</Question>
+      <Answer>
+        <BrandTextField
+          value={data.goal}
+          onChangeText={handleGoalChange}
+          placeholder="예) 자격증 공부, 전공 공부 등"
+          autoCapitalize="none"
+          returnKeyType="done"
+        />
+      </Answer>
+    </Container>
+  );
+}

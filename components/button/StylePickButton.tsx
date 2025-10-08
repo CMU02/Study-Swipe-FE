@@ -58,7 +58,7 @@ const ButtonBox = styled.TouchableOpacity<{
 
 const ButtonLabel = styled.Text<{ selected: boolean }>`
   font-size: 20px;
-  font-weight: 700;
+  font-family: Paperlogy-SemiBold;
   color: #fff;
 `;
 

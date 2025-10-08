@@ -54,7 +54,7 @@ const StyledInput = styled.TextInput<{
   $padRight: number; // 오른쪽에 아이콘/버튼 있을 때 padding-right 가변
 }>`
   font-size: 15px;
-  font-weight: 600;
+  font-family: Paperlogy-SemiBold;
   width: 100%;
   height: 48px;
   padding: 0 ${({ $padRight }) => $padRight}px 0 14px;
