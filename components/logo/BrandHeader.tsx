@@ -5,7 +5,7 @@ interface BrandHeaderProps {
   onPressLogo?: () => void;
 }
 
-const Safe = styled.SafeAreaView`
+const Safe = styled.View`
   background-color: #fff;
 `;
 

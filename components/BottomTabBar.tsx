@@ -13,7 +13,7 @@ const TABS: Array<{
   icon: React.ComponentProps<typeof Feather>["name"];
 }> = [
   { key: "home", route: "Today", icon: "home" },
-  { key: "mail", route: "Mail", icon: "mail" },
+  { key: "mail", route: "Talk", icon: "mail" },
   { key: "star", route: "Favorites", icon: "star" },
   { key: "user", route: "Profile", icon: "user" },
 ];
@@ -49,7 +49,7 @@ const Badge = styled.View`
 const BadgeText = styled.Text`
   color: #fff;
   font-size: 10px;
-  font-weight: 700;
+  font-family: "Paperlogy-SemiBold";
 `;
 
 /** 중첩 네비게이터의 최하위 활성 라우트 이름 추출 */

@@ -5,14 +5,17 @@
 ## 설치된 주요 라이브러리
 
 ### 1. React Navigation
+
 - **@react-navigation/native**: React Native 앱의 네비게이션을 위한 핵심 라이브러리
 - **@react-navigation/native-stack**: 스택 네비게이션 구현
 - **@react-navigation/bottom-tabs**: 하단 탭 네비게이션 구현
 
 ### 2. Styled Components
+
 - **styled-components**: CSS-in-JS 라이브러리로 컴포넌트 스타일링을 위해 사용
 
 ### 3. Expo Font
+
 - **expo-font**: 런타임에서 폰트를 로드하고 React Native 컴포넌트에서 사용할 수 있게 해주는 라이브러리
 
 ## Expo Font 사용법
@@ -41,16 +44,16 @@
 `useFonts` 훅을 사용하여 런타임에 폰트를 로드할 수 있습니다:
 
 ```tsx
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+import { Text, View, StyleSheet } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [loaded, error] = useFonts({
-    'Inter-Black': require('./assets/fonts/Inter-Black.otf'),
+    "Inter-Black": require("./assets/fonts/Inter-Black.otf"),
   });
 
   useEffect(() => {
@@ -65,7 +68,9 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontFamily: 'Inter-Black', fontSize: 30 }}>Inter Black</Text>
+      <Text style={{ fontFamily: "Inter-Black", fontSize: 30 }}>
+        Inter Black
+      </Text>
       <Text style={{ fontSize: 30 }}>Platform Default</Text>
     </View>
   );
@@ -74,8 +79,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 ```
@@ -83,18 +88,20 @@ const styles = StyleSheet.create({
 ### 주요 API
 
 #### useFonts 훅
+
 ```tsx
 const [loaded, error] = useFonts({
-  'FontName': require('./path/to/font.otf'),
+  FontName: require("./path/to/font.otf"),
 });
 ```
 
 #### Font.loadAsync 메서드
+
 ```tsx
-import * as Font from 'expo-font';
+import * as Font from "expo-font";
 
 await Font.loadAsync({
-  'FontName': require('./path/to/font.otf'),
+  FontName: require("./path/to/font.otf"),
 });
 ```
 

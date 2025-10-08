@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackList } from "../../navigation/AppNavigator";
 
-const Screen = styled.SafeAreaView`
+const Screen = styled.View`
   flex: 1;
   background-color: #fff;
 `;
@@ -26,7 +26,7 @@ const Container = styled.View`
 
 const Title = styled.Text`
   font-size: 40px;
-  font-weight: 600;
+  font-family: "Paperlogy-SemiBold";
   margin: 16px 0 20px;
   color: #000;
 `;
