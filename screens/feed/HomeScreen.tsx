@@ -13,7 +13,7 @@ import BottomTabBar from "../../components/BottomTabBar";
 import TopTabs from "../../components/TopTabs";
 
 /* ───────────── Styled ───────────── */
-const Screen = styled.View`
+const Screen = styled.SafeAreaView`
   flex: 1;
   background-color: #fff;
 `;
