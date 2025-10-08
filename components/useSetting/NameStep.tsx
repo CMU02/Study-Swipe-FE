@@ -5,14 +5,22 @@ import GenderSelect from "../input/Select";
 
 export interface UserSettingData {
   userName: string;
-  userGender: "남" | "여" | "기타" | "";
+  userGender: "남" | "여" | "";
   college: string;
   userArea_1: "서울특별시" | "경기도" | "";
   userArea_2: string;
   distance: number;
   goal: string;
-  studyTags: string[];
-  surveyAnswers: { [key: number]: number };
+  studyTags: string[]; // API의 StudyTag.tag_name에 해당
+  questions?: Array<{
+    tag: string;
+    questions: Array<{
+      no: number;
+      level: string;
+      text: string;
+    }>;
+  }>; // AI로 생성된 질문들
+  surveyAnswers: { [key: number]: number }; // 질문 번호를 키로 하는 답변
   peopleNumber: string;
   studyStyle: string;
   smoking: string;
@@ -61,13 +69,13 @@ export default function NameStep({
   };
 
   const handleGenderChange = (gender: string) => {
-    onDataChange({ userGender: gender as "남" | "여" | "기타" });
+    onDataChange({ userGender: gender as "남" | "여" });
     validateInput(data.userName, gender);
   };
 
   const validateInput = (name: string, gender: string) => {
     const validName = /^[가-힣]{2,}$/.test(name.trim());
-    const validGender = ["남", "여", "기타"].includes(gender);
+    const validGender = ["남", "여"].includes(gender);
     onValidationChange(validName && validGender);
   };
 
@@ -88,7 +96,7 @@ export default function NameStep({
           value={data.userGender}
           onChange={handleGenderChange}
           placeholder="성별 선택"
-          options={["남", "여", "기타"]}
+          options={["남", "여"]}
           width={120}
         />
       </Answer>

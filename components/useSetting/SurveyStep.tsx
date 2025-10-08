@@ -123,28 +123,6 @@ const RadioInner = styled.View<{ selected: boolean }>`
   background-color: ${(props) => (props.selected ? "#fff" : "transparent")};
 `;
 
-// 더미 데이터
-const DUMMY_QUESTIONS = [
-  {
-    no: 1,
-    tag: "백엔드",
-    level: "기초",
-    question: "RESTful API의 기본 개념을 설명할 수 있나요?",
-  },
-  {
-    no: 2,
-    tag: "백엔드",
-    level: "경험",
-    question: "데이터베이스 인덱스를 활용한 쿼리 최적화 경험이 있나요?",
-  },
-  {
-    no: 3,
-    tag: "백엔드",
-    level: "응용",
-    question: "마이크로서비스 아키텍처를 설계하고 구현해본 적이 있나요?",
-  },
-];
-
 interface SurveyStepProps {
   data: UserSettingData;
   onDataChange: (data: Partial<UserSettingData>) => void;
@@ -157,18 +135,29 @@ export default function SurveyStep({
   onValidationChange,
 }: SurveyStepProps) {
   const surveyAnswers = data.surveyAnswers || {};
+  const questions = data.questions || [];
+
+  // 모든 질문을 평면화하여 하나의 배열로 만들기
+  const allQuestions = questions.flatMap((tagItem) =>
+    tagItem.questions.map((q) => ({
+      ...q,
+      tag: tagItem.tag,
+    }))
+  );
 
   const handleAnswerChange = (questionNo: number, value: number) => {
     const updatedAnswers = {
       ...surveyAnswers,
       [questionNo]: value,
     };
+
     onDataChange({ surveyAnswers: updatedAnswers });
 
     // 모든 질문에 답했는지 확인
-    const allAnswered = DUMMY_QUESTIONS.every(
+    const allAnswered = allQuestions.every(
       (q) => updatedAnswers[q.no] !== undefined
     );
+
     onValidationChange(allAnswered);
   };
 
@@ -194,55 +183,63 @@ export default function SurveyStep({
 
       <SurveyContainer>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {DUMMY_QUESTIONS.map((item) => {
-            const levelStyle = getLevelColor(item.level);
-            return (
-              <QuestionItem key={item.no}>
-                <QuestionHeader>
-                  <QuestionNumber>Q{item.no}.</QuestionNumber>
-                  <QuestionTag>{item.tag}</QuestionTag>
-                  <QuestionLevel
-                    style={{
-                      backgroundColor: levelStyle.bg,
-                      color: levelStyle.text,
-                    }}
-                  >
-                    {item.level}
-                  </QuestionLevel>
-                </QuestionHeader>
+          {allQuestions.length === 0 ? (
+            <QuestionItem>
+              <QuestionText style={{ textAlign: "center", color: "#666" }}>
+                질문을 불러오는 중입니다...
+              </QuestionText>
+            </QuestionItem>
+          ) : (
+            allQuestions.map((item) => {
+              const levelStyle = getLevelColor(item.level);
+              return (
+                <QuestionItem key={item.no}>
+                  <QuestionHeader>
+                    <QuestionNumber>Q{item.no}.</QuestionNumber>
+                    <QuestionTag>{item.tag}</QuestionTag>
+                    <QuestionLevel
+                      style={{
+                        backgroundColor: levelStyle.bg,
+                        color: levelStyle.text,
+                      }}
+                    >
+                      {item.level}
+                    </QuestionLevel>
+                  </QuestionHeader>
 
-                <QuestionText>{item.question}</QuestionText>
+                  <QuestionText>{item.text}</QuestionText>
 
-                <ScaleContainer>
-                  <RadioRow>
-                    {[
-                      { value: 1, label: "매우\n그렇지않다" },
-                      { value: 2, label: "그렇지않다" },
-                      { value: 3, label: "보통이다" },
-                      { value: 4, label: "그렇다" },
-                      { value: 5, label: "매우\n그렇다" },
-                    ].map((option) => (
-                      <RadioItem key={option.value}>
-                        <LabelContainer>
-                          <ScaleLabel>{option.label}</ScaleLabel>
-                        </LabelContainer>
-                        <RadioButton
-                          selected={surveyAnswers[item.no] === option.value}
-                          onPress={() =>
-                            handleAnswerChange(item.no, option.value)
-                          }
-                        >
-                          <RadioInner
+                  <ScaleContainer>
+                    <RadioRow>
+                      {[
+                        { value: 1, label: "매우\n그렇지않다" },
+                        { value: 2, label: "그렇지않다" },
+                        { value: 3, label: "보통이다" },
+                        { value: 4, label: "그렇다" },
+                        { value: 5, label: "매우\n그렇다" },
+                      ].map((option) => (
+                        <RadioItem key={option.value}>
+                          <LabelContainer>
+                            <ScaleLabel>{option.label}</ScaleLabel>
+                          </LabelContainer>
+                          <RadioButton
                             selected={surveyAnswers[item.no] === option.value}
-                          />
-                        </RadioButton>
-                      </RadioItem>
-                    ))}
-                  </RadioRow>
-                </ScaleContainer>
-              </QuestionItem>
-            );
-          })}
+                            onPress={() =>
+                              handleAnswerChange(item.no, option.value)
+                            }
+                          >
+                            <RadioInner
+                              selected={surveyAnswers[item.no] === option.value}
+                            />
+                          </RadioButton>
+                        </RadioItem>
+                      ))}
+                    </RadioRow>
+                  </ScaleContainer>
+                </QuestionItem>
+              );
+            })
+          )}
         </ScrollView>
       </SurveyContainer>
     </Container>

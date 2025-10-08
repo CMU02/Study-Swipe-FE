@@ -11,7 +11,7 @@ import TalkNavi from "./navigation/TalkNavi";
 
 export default function App() {
   // 테스트용 토글: true면 UserSettingNavi, false면 AppNavigator
-  const USE_USER_SETTING = false;
+  const USE_USER_SETTING = true;
 
   return (
     <FontLoader>

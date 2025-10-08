@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import Slider from "@react-native-community/slider";
 import { UserSettingData } from "./NameStep";
-import { unClickColor, secondaryColor } from "../../styles/Color";
+import { unClickColor, secondaryColor, textColor } from "../../styles/Color";
 
 const Container = styled.View`
   flex: 1;
@@ -71,9 +71,9 @@ export default function DistanceStep({
             minimumValue={minKm}
             maximumValue={maxKm}
             step={1}
-            minimumTrackTintColor="#000000"
+            minimumTrackTintColor={textColor}
             maximumTrackTintColor={unClickColor}
-            thumbTintColor="#000000"
+            thumbTintColor={textColor}
             onValueChange={handleDistanceChange}
           />
         </SliderWrap>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components/native";
 import { Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import BrandHeader from "../../components/logo/BrandHeader";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { primaryColor } from "../../styles/Color";
@@ -77,6 +78,20 @@ const LoginScreen = () => {
     navi.navigate("SignUp");
   };
 
+  // 토큰 저장 함수
+  const saveTokens = async (accessToken: string, refreshToken: string) => {
+    try {
+      await AsyncStorage.multiSet([
+        ["accessToken", accessToken],
+        ["refreshToken", refreshToken],
+      ]);
+      console.log("토큰이 성공적으로 저장되었습니다.");
+    } catch (error) {
+      console.error("토큰 저장 실패:", error);
+      throw error;
+    }
+  };
+
   const handleLogin = async () => {
     if (!user_id.trim() || !password.trim()) {
       Alert.alert("오류", "아이디와 비밀번호를 입력해주세요.");
@@ -91,9 +106,14 @@ const LoginScreen = () => {
       });
 
       if (response.status_code === 200) {
-        // TODO: 토큰 저장
-        console.log("Access Token:", response.option.data.accessToken);
-        console.log("Refresh Token:", response.option.data.refreshToken);
+        const { accessToken, refreshToken } = response.option.data;
+
+        // AsyncStorage에 토큰 저장
+        await saveTokens(accessToken, refreshToken);
+
+        // 테스트용 Log 값 삭제예정
+        console.log("Access Token 저장 완료:", accessToken);
+        console.log("Refresh Token 저장 완료:", refreshToken);
 
         Alert.alert("성공", response.message, [
           {
@@ -105,6 +125,7 @@ const LoginScreen = () => {
         ]);
       }
     } catch (error: any) {
+      console.error("로그인 오류:", error);
       Alert.alert(
         "로그인 실패",
         error.response?.data?.message || "로그인에 실패했습니다."

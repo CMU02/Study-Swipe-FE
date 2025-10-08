@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Alert } from "react-native";
 import ProgressBar from "../../components/ProgressBar";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor, secondaryColor } from "../../styles/Color";
+import { makeQuestions, MakeQuestionsRequest } from "../../api/tag";
+import { getAuthToken } from "../../utils/auth";
 
-// Step Components
 import NameStep, {
   UserSettingData,
 } from "../../components/useSetting/NameStep";
@@ -53,6 +54,7 @@ const TOTAL_STEPS = 9;
 export default function UserSettingContainer() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isCurrentStepValid, setIsCurrentStepValid] = useState(false);
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
   const [userSettingData, setUserSettingData] = useState<UserSettingData>({
     userName: "",
     userGender: "",
@@ -62,6 +64,7 @@ export default function UserSettingContainer() {
     distance: 25,
     goal: "",
     studyTags: ["", "", "", "", ""],
+    questions: [],
     surveyAnswers: {},
     peopleNumber: "1~2인",
     studyStyle: "멘토",
@@ -73,14 +76,60 @@ export default function UserSettingContainer() {
     setUserSettingData((prev) => ({ ...prev, ...newData }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    // StudyTagStep에서 SurveyStep으로 넘어갈 때 질문 생성
+    if (currentStep === 6) {
+      await generateQuestionsForSurvey();
+    }
+
     if (currentStep < TOTAL_STEPS) {
       setCurrentStep((prev) => prev + 1);
       setIsCurrentStepValid(false);
     } else {
       // 완료 처리
       console.log("User Setting Complete:", userSettingData);
-      // 여기서 데이터 저장 또는 다음 화면으로 이동
+    }
+  };
+
+  const generateQuestionsForSurvey = async () => {
+    const filledTags = userSettingData.studyTags.filter(
+      (tag) => tag.trim().length > 0
+    );
+
+    if (filledTags.length === 0) {
+      Alert.alert("알림", "최소 하나의 태그를 입력해주세요.");
+      return;
+    }
+
+    setIsLoadingQuestions(true);
+
+    try {
+      const token = await getAuthToken();
+
+      if (!token) {
+        Alert.alert("오류", "인증 토큰이 없습니다. 다시 로그인해주세요.");
+        return;
+      }
+
+      const requestData: MakeQuestionsRequest = {
+        tags: filledTags,
+      };
+
+      const response = await makeQuestions(requestData, token);
+
+      if (response.items && response.items.length > 0) {
+        setUserSettingData((prev) => ({
+          ...prev,
+          questions: response.items,
+          surveyAnswers: {}, // 새로운 질문이 생성되면 기존 답변 초기화
+        }));
+      }
+    } catch (error) {
+      console.error("질문 생성 실패:", error);
+      Alert.alert("오류", "질문 생성에 실패했습니다. 다시 시도해주세요.");
+      return;
+    } finally {
+      setIsLoadingQuestions(false);
     }
   };
 
@@ -179,18 +228,20 @@ export default function UserSettingContainer() {
             </BackButtonContainer>
             <NextButtonContainer>
               <PrimaryButton
-                title={getButtonTitle()}
+                title={
+                  isLoadingQuestions ? "질문 생성 중..." : getButtonTitle()
+                }
                 bgColor={getButtonColor()}
-                disabled={!isCurrentStepValid}
+                disabled={!isCurrentStepValid || isLoadingQuestions}
                 onPress={handleNext}
               />
             </NextButtonContainer>
           </ButtonContainer>
         ) : (
           <PrimaryButton
-            title={getButtonTitle()}
+            title={isLoadingQuestions ? "질문 생성 중..." : getButtonTitle()}
             bgColor={getButtonColor()}
-            disabled={!isCurrentStepValid}
+            disabled={!isCurrentStepValid || isLoadingQuestions}
             onPress={handleNext}
           />
         )}
