@@ -9,13 +9,9 @@ import PrimaryButton from "../../components/button/PrimaryButton";
 import { clickColor, secondaryColor } from "../../styles/Color";
 import {
   makeQuestions,
-  MakeQuestionsRequest,
   createStudyTags,
   completeSurvey,
-  CompleteSurveyRequest,
-} from "../../api/tag";
-import { createProfile } from "../../api/profile";
-import {
+  createProfile,
   addUniversity,
   updateMajor,
   updateActivityRadius,
@@ -26,12 +22,15 @@ import {
   updateCollabStyle,
   updateParticipationInfo,
   updateRegion,
-} from "../../api/userSetting";
+} from "../../api";
+import type {
+  MakeQuestionsRequest,
+  CompleteSurveyRequest,
+} from "../../api/types";
 import { getAuthToken } from "../../utils/auth";
 
-import NameStep, {
-  UserSettingData,
-} from "../../components/useSetting/NameStep";
+import NameStep from "../../components/useSetting/NameStep";
+import type { UserSettingData } from "../../components/useSetting/types";
 import BirthStep from "../../components/useSetting/BirthStep";
 import CollegeStep from "../../components/useSetting/CollegeStep";
 import AreaStep from "../../components/useSetting/AreaStep";
