@@ -12,7 +12,7 @@ const TABS: Array<{
   route: string;
   icon: React.ComponentProps<typeof Feather>["name"];
 }> = [
-  { key: "home", route: "Today", icon: "home" },
+  { key: "home", route: "Home", icon: "home" },
   { key: "mail", route: "Talk", icon: "mail" },
   { key: "star", route: "Favorites", icon: "star" },
   { key: "user", route: "Profile", icon: "user" },

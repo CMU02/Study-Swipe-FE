@@ -1,5 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components/native";
+import { Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import BrandHeader from "../../components/logo/BrandHeader";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { primaryColor } from "../../styles/Color";
@@ -7,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackList } from "../../navigation/AppNavigator";
 import BrandTextField from "../../components/input/BrandTextField";
+import { login } from "../../api/auth";
 
 const Screen = styled.View`
   flex: 1;
@@ -65,13 +68,67 @@ const ButtonRow = styled.View`
 `;
 
 const LoginScreen = () => {
-  const [id, setId] = useState("");
-  const [pw, setPw] = useState("");
+  const [user_id, setUser_id] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navi = useNavigation<NativeStackNavigationProp<StackList>>();
 
   const goToSignUpScreen = () => {
     navi.navigate("SignUp");
+  };
+
+  // 토큰 저장 함수
+  const saveTokens = async (accessToken: string, refreshToken: string) => {
+    try {
+      await AsyncStorage.multiSet([
+        ["accessToken", accessToken],
+        ["refreshToken", refreshToken],
+      ]);
+      console.log("토큰이 성공적으로 저장되었습니다.");
+    } catch (error) {
+      console.error("토큰 저장 실패:", error);
+      throw error;
+    }
+  };
+
+  const handleLogin = async () => {
+    if (!user_id.trim() || !password.trim()) {
+      Alert.alert("오류", "아이디와 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await login({
+        user_id: user_id.trim(),
+        user_pwd: password,
+      });
+
+      if (response.status_code === 200) {
+        const { accessToken, refreshToken } = response.option.data;
+
+        // AsyncStorage에 토큰 저장
+        await saveTokens(accessToken, refreshToken);
+
+        Alert.alert("성공", response.message, [
+          {
+            text: "확인",
+            onPress: () => {
+              navi.navigate("Home");
+            },
+          },
+        ]);
+      }
+    } catch (error: any) {
+      console.error("로그인 오류:", error);
+      Alert.alert(
+        "로그인 실패",
+        error.response?.data?.message || "로그인에 실패했습니다."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -86,8 +143,8 @@ const LoginScreen = () => {
             {/* 아이디 */}
             <BrandTextField
               placeholder="아이디"
-              value={id}
-              onChangeText={setId}
+              value={user_id}
+              onChangeText={setUser_id}
               autoCapitalize="none"
               returnKeyType="next"
             />
@@ -95,8 +152,8 @@ const LoginScreen = () => {
             {/* 비밀번호 */}
             <BrandTextField
               placeholder="비밀번호"
-              value={pw}
-              onChangeText={setPw}
+              value={password}
+              onChangeText={setPassword}
               secureToggle
               returnKeyType="done"
             />
@@ -114,11 +171,10 @@ const LoginScreen = () => {
           {/* 로그인 버튼 */}
           <ButtonRow>
             <PrimaryButton
-              title="로그인"
+              title={loading ? "로그인 중..." : "로그인"}
               bgColor={primaryColor}
-              onPress={() => {
-                // TODO: 로그인 처리
-              }}
+              onPress={handleLogin}
+              disabled={loading}
             />
           </ButtonRow>
         </Container>

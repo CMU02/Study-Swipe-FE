@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   LayoutChangeEvent,
   Image,
+  ScrollView,
 } from "react-native";
 import styled from "styled-components/native";
 import { textOpacityColor } from "../../styles/Color";
@@ -23,6 +24,8 @@ export interface SelectProps {
   placeholder?: string;
   // 가로 길이 (기본 값 : 120)
   width?: number;
+  // 드롭다운 최대 높이 (기본 값 : 200)
+  maxHeight?: number;
 }
 
 /** 내부 스타일 컴포넌트 Prop 타입 */
@@ -51,7 +54,7 @@ const Trigger = styled.TouchableOpacity`
 
 const TriggerText = styled.Text`
   font-size: 15px;
-  font-weight: 600;
+  font-family: Paperlogy-SemiBold;
   color: ${textOpacityColor};
 `;
 
@@ -66,6 +69,7 @@ const Dropdown = styled.View<DropdownStyleProps>`
   left: 0px;
   top: ${({ top }) => `${top}px`};
   width: ${({ width }) => `${width}px`};
+  max-height: 200px;
 
   border-width: 2px;
   border-color: ${textOpacityColor};
@@ -83,6 +87,7 @@ const Option = styled.TouchableOpacity`
 
 const OptionText = styled.Text`
   font-size: 15px;
+  font-family: Paperlogy-SemiBold;
   color: ${textOpacityColor};
 `;
 
@@ -100,6 +105,7 @@ export default function Select({
   options,
   placeholder = "선택",
   width,
+  maxHeight = 200,
 }: SelectProps) {
   const [open, setOpen] = useState(false);
   const [triggerSize, setTriggerSize] = useState({ width: 120, height: 48 });
@@ -140,15 +146,21 @@ export default function Select({
 
       {open && (
         <Dropdown top={triggerSize.height + 4} width={finalWidth}>
-          {options.map((opt, idx) => {
-            const label = getLabel(opt);
-            const val = getValue(opt);
-            return (
-              <Option key={`${val}-${idx}`} onPress={() => handleSelect(opt)}>
-                <OptionText>{label}</OptionText>
-              </Option>
-            );
-          })}
+          <ScrollView
+            style={{ maxHeight: maxHeight }}
+            showsVerticalScrollIndicator={true}
+            nestedScrollEnabled={true}
+          >
+            {options.map((opt, idx) => {
+              const label = getLabel(opt);
+              const val = getValue(opt);
+              return (
+                <Option key={`${val}-${idx}`} onPress={() => handleSelect(opt)}>
+                  <OptionText>{label}</OptionText>
+                </Option>
+              );
+            })}
+          </ScrollView>
         </Dropdown>
       )}
     </Wrapper>
