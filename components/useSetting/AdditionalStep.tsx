@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import StylePickButton from "../button/StylePickButton";
-import { UserSettingData } from "./NameStep";
+import type { UserSettingData, AdditionalStepProps } from "./types";
 
 const Container = styled.View`
   flex: 1;
@@ -21,12 +21,6 @@ const Answer = styled.View`
   align-self: stretch;
   gap: 20px;
 `;
-
-interface AdditionalStepProps {
-  data: UserSettingData;
-  onDataChange: (data: Partial<UserSettingData>) => void;
-  onValidationChange: (isValid: boolean) => void;
-}
 
 export default function AdditionalStep({
   data,

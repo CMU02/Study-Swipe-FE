@@ -1,40 +1,9 @@
 import api from "./config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-/* 타입 정의 */
-export interface MetaData {
-  cities: string[];
-}
-
-export interface GetRegionsCitiesResponse {
-  status_code: number;
-  message: string;
-  option: {
-    meta_data: MetaData;
-  };
-}
-
-export interface GetSpecificCityRegionRequest {
-  city: string;
-}
-
-export interface Region {
-  id: string;
-  city_first: string;
-  city_second: string | null;
-  lat: string;
-  lng: string;
-}
-
-export interface GetSpecificCityRegionResponse {
-  status_code: number;
-  message: string;
-  option: {
-    meta_data: {
-      regions: Region[];
-    };
-  };
-}
+import type {
+  GetRegionsCitiesResponse,
+  GetSpecificCityRegionResponse,
+} from "./types/area";
 
 /* 지역 API */
 // 시/도 목록 조회

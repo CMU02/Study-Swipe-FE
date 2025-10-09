@@ -1,79 +1,16 @@
 import api from "./config";
-
-/* 타입 정의 */
-export interface RegisterRequest {
-  user_id: string;
-  user_pwd: string;
-}
-
-export interface RegisterResponse {
-  status_code: number;
-  message: string;
-  option: {
-    data: {
-      user_uuid: string;
-      user_id: string;
-      email: string;
-    };
-  };
-}
-
-export interface SendVerificationCodeRequest {
-  user_id: string;
-  user_email: string;
-}
-
-export interface SendVerificationCodeResponse {
-  status_code: number;
-  message: string;
-}
-
-export interface ConfirmVerificationCodeRequest {
-  user_id: string;
-  user_email: string;
-  verify_code: string;
-}
-
-export interface ConfirmVerificationCodeResponse {
-  status_code: number;
-  message: string;
-  option: {
-    data: {
-      accessToken: string;
-      refreshToken: string;
-    };
-  };
-}
-
-export interface TermsAgreementRequest {
-  user_id: string;
-  is_over_18: boolean;
-  terms_of_service: boolean;
-  collection_usage_personal_information: boolean;
-  third_party_sharing: boolean;
-  user_alarm_advertisement: boolean;
-}
-
-export interface TermsAgreementResponse {
-  status_code: number;
-  message: string;
-}
-
-export interface LoginRequest {
-  user_id: string;
-  user_pwd: string;
-}
-
-export interface LoginResponse {
-  status_code: number;
-  message: string;
-  option: {
-    data: {
-      accessToken: string;
-      refreshToken: string;
-    };
-  };
-}
+import type {
+  RegisterRequest,
+  RegisterResponse,
+  SendVerificationCodeRequest,
+  SendVerificationCodeResponse,
+  ConfirmVerificationCodeRequest,
+  ConfirmVerificationCodeResponse,
+  TermsAgreementRequest,
+  TermsAgreementResponse,
+  LoginRequest,
+  LoginResponse,
+} from "./types/auth";
 
 /* 인증 API */
 // 회원가입

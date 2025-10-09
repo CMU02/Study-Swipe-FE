@@ -1,14 +1,20 @@
-// Auth APIs
+// Auth API
 export * from "./auth";
 
-// Profile APIs
+// Area API
+export * from "./area";
+
+// Profile API
 export * from "./profile";
 
-// User Setting APIs
+// User Setting API
 export * from "./userSetting";
 
-// Tag APIs
+// Tag API
 export * from "./tag";
+
+// Types
+export * from "./types";
 
 // Config
 export { default as api } from "./config";

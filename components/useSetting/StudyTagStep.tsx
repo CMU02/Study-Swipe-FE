@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import BrandTextField from "../input/BrandTextField";
-import { UserSettingData } from "./NameStep";
+import type { UserSettingData, StudyTagStepProps } from "./types";
 import { clickColor } from "../../styles/Color";
 
 const Container = styled.View`
@@ -32,12 +32,6 @@ const Answer = styled.View`
   align-self: stretch;
   gap: 10px;
 `;
-
-interface StudyTagStepProps {
-  data: UserSettingData;
-  onDataChange: (data: Partial<UserSettingData>) => void;
-  onValidationChange: (isValid: boolean) => void;
-}
 
 export default function StudyTagStep({
   data,

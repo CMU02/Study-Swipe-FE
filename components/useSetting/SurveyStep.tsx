@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import { ScrollView } from "react-native";
-import { UserSettingData } from "./NameStep";
+import type { UserSettingData, SurveyStepProps } from "./types";
 import { clickColor, textColor } from "../../styles/Color";
 
 const Container = styled.View`
@@ -122,12 +122,6 @@ const RadioInner = styled.View<{ selected: boolean }>`
   border-radius: 4px;
   background-color: ${(props) => (props.selected ? "#fff" : "transparent")};
 `;
-
-interface SurveyStepProps {
-  data: UserSettingData;
-  onDataChange: (data: Partial<UserSettingData>) => void;
-  onValidationChange: (isValid: boolean) => void;
-}
 
 export default function SurveyStep({
   data,

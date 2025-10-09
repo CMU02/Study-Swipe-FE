@@ -1,113 +1,26 @@
 import api from "./config";
-
-/* 타입 정의 */
-export interface AddUniversityRequest {
-  universityName: string;
-}
-
-export interface AddUniversityResponse {
-  status_code: number;
-  message: string;
-  option: {
-    meta_data: {
-      user_uuid: string;
-      university: {
-        id: string;
-        name: string;
-      };
-    };
-  };
-}
-
-export interface UpdateSmokingStatusRequest {
-  smoking_status_name: string;
-}
-
-export interface UpdateSmokingStatusResponse {
-  status_code: number;
-  message: string;
-}
-
-export interface UpdateSocialPrefRequest {
-  social_pref_name: string;
-}
-
-export interface UpdateSocialPrefResponse {
-  status_code: number;
-  message: string;
-}
-
-export interface UpdatePreferredMemberCountRequest {
-  min_member_count: number;
-  max_member_count: number;
-}
-
-export interface UpdatePreferredMemberCountResponse {
-  status_code: number;
-  message: string;
-}
-
-export interface UpdateStudyInfoResponse {
-  status_code: number;
-  message: string;
-}
-
-export interface UpdateGoalsNoteRequest {
-  goals_note: string;
-}
-
-export interface UpdateGoalsNoteResponse {
-  status_code: number;
-  message: string;
-}
-
-export interface UpdateActivityRadiusRequest {
-  activity_radius_km: number;
-}
-
-export interface UpdateActivityRadiusResponse {
-  status_code: number;
-  message: string;
-}
-
-export interface UpdateCollabStyleRequest {
-  collab_style_id: number;
-}
-
-export interface UpdateCollabStyleResponse {
-  status_code: number;
-  message: string;
-}
-
-export interface UpdateMajorRequest {
-  major_name: string;
-}
-
-export interface UpdateMajorResponse {
-  status_code: number;
-  message: string;
-}
-
-export interface UpdateParticipationInfoRequest {
-  period: number;
-  period_length: string;
-  start_time: string;
-  end_time: string;
-}
-
-export interface UpdateParticipationInfoResponse {
-  status_code: number;
-  message: string;
-}
-
-export interface UpdateRegionRequest {
-  region_id: string;
-}
-
-export interface UpdateRegionResponse {
-  status_code: number;
-  message: string;
-}
+import type {
+  AddUniversityRequest,
+  AddUniversityResponse,
+  UpdateSmokingStatusRequest,
+  UpdateSmokingStatusResponse,
+  UpdateSocialPrefRequest,
+  UpdateSocialPrefResponse,
+  UpdatePreferredMemberCountRequest,
+  UpdatePreferredMemberCountResponse,
+  UpdateGoalsNoteRequest,
+  UpdateGoalsNoteResponse,
+  UpdateActivityRadiusRequest,
+  UpdateActivityRadiusResponse,
+  UpdateCollabStyleRequest,
+  UpdateCollabStyleResponse,
+  UpdateMajorRequest,
+  UpdateMajorResponse,
+  UpdateParticipationInfoRequest,
+  UpdateParticipationInfoResponse,
+  UpdateRegionRequest,
+  UpdateRegionResponse,
+} from "./types/userSetting";
 
 /* 사용자 설정 API */
 // 대학교 정보 업데이트

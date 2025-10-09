@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import BrandTextField from "../input/BrandTextField";
-import { UserSettingData } from "./NameStep";
+import type { UserSettingData, PeriodStepProps } from "./types";
 
 const Container = styled.View`
   flex: 1;
@@ -23,12 +23,6 @@ const Answer = styled.View`
   align-self: stretch;
   gap: 10px;
 `;
-
-interface PeriodStepProps {
-  data: UserSettingData;
-  onDataChange: (data: Partial<UserSettingData>) => void;
-  onValidationChange: (isValid: boolean) => void;
-}
 
 export default function PeriodStep({
   data,

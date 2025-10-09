@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import Select from "../input/Select";
-import { UserSettingData } from "./NameStep";
+import type { UserSettingData, AreaStepProps } from "./types";
 import { textColor } from "../../styles/Color";
-import {
-  getRegionsCities,
-  getSpecificCityRegion,
-  Region,
-} from "../../api/area";
+import { getRegionsCities, getSpecificCityRegion } from "../../api/area";
+import type { Region } from "../../api/types";
 
 const Container = styled.View`
   flex: 1;
@@ -34,12 +31,6 @@ const Answer = styled.View`
   align-self: stretch;
   gap: 12px;
 `;
-
-interface AreaStepProps {
-  data: UserSettingData;
-  onDataChange: (data: Partial<UserSettingData>) => void;
-  onValidationChange: (isValid: boolean) => void;
-}
 
 export default function AreaStep({
   data,
@@ -68,25 +59,6 @@ export default function AreaStep({
       setCities(response.option.meta_data.cities);
     } catch (error) {
       console.error("시/도 목록 로드 실패:", error);
-      // 임시로 하드코딩된 데이터 사용
-      setCities([
-        "경기도",
-        "서울특별시",
-        "부산광역시",
-        "대구광역시",
-        "인천광역시",
-        "광주광역시",
-        "대전광역시",
-        "울산광역시",
-        "경상남도",
-        "경상북도",
-        "전라남도",
-        "전라북도",
-        "충청남도",
-        "충청북도",
-        "강원도",
-        "제주특별자치도",
-      ]);
     }
   };
 
@@ -140,7 +112,9 @@ export default function AreaStep({
           value={data.userArea_2}
           onChange={handleArea2Change}
           placeholder="시/구"
-          options={regions.map((region) => region.city_second).filter(Boolean)}
+          options={regions
+            .map((region) => region.city_second)
+            .filter((city): city is string => city !== null)}
           width={160}
           maxHeight={200}
         />
