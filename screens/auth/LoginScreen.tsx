@@ -111,10 +111,6 @@ const LoginScreen = () => {
         // AsyncStorage에 토큰 저장
         await saveTokens(accessToken, refreshToken);
 
-        // 테스트용 Log 값 삭제예정
-        console.log("Access Token 저장 완료:", accessToken);
-        console.log("Refresh Token 저장 완료:", refreshToken);
-
         Alert.alert("성공", response.message, [
           {
             text: "확인",

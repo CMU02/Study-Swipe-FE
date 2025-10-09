@@ -86,9 +86,7 @@ function SignUpScreen() {
         user_pwd,
       });
 
-      // user_id 값 정상적으로 넘어오는지 확인하기 위해 log 추후 삭제
       if (response.status_code === 201) {
-        console.log("회원가입 성공 - 전달할 user_id:", user_id.trim());
         Alert.alert("성공", response.message, [
           {
             text: "확인",

@@ -3,10 +3,11 @@ import styled from "styled-components/native";
 import BrandHeader from "../../components/logo/BrandHeader";
 import TopTabs from "../../components/TopTabs";
 import NatificationBox from "../../components/NotificationBox";
+import BottomTabBar from "../../components/BottomTabBar";
 import { clickColor, secondaryColor, textColor } from "../../styles/Color";
 import TagBox from "../../components/TagBox";
 
-const Screen = styled.View`
+const Screen = styled.SafeAreaView`
   flex: 1;
   background-color: #fff;
 `;
@@ -252,6 +253,8 @@ export default function To() {
 
       {/* 탭 전환 시 내부 상태 초기화 (예: 확장/스크롤) */}
       <Notification key={activeTopTab}>{content}</Notification>
+
+      <BottomTabBar />
     </Screen>
   );
 }

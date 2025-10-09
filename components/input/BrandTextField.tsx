@@ -149,7 +149,7 @@ export default function AppTextField({
   }, [secureToggle, hidden]);
 
   const rightIcon = useMemo(() => {
-    if (showEye) return hidden ? "eye" : "eye-off";
+    if (showEye) return hidden ? "eye-off" : "eye";
     return rightIconName;
   }, [showEye, hidden, rightIconName]);
 

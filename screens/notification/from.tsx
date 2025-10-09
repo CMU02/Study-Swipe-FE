@@ -7,7 +7,7 @@ import NatificationBox from "../../components/NotificationBox";
 import { clickColor, secondaryColor, textColor } from "../../styles/Color";
 import TagBox from "../../components/TagBox";
 
-const Screen = styled.View`
+const Screen = styled.SafeAreaView`
   flex: 1;
   background-color: #fff;
 `;
@@ -132,6 +132,8 @@ export default function From() {
           </Card>
         </NatificationBox>
       </Notification>
+
+      <BottomTabBar />
     </Screen>
   );
 }

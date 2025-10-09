@@ -51,8 +51,15 @@ export default function DistanceStep({
   const minKm = 1;
   const maxKm = 50;
 
+  // 컴포넌트 마운트 시 기본값이 있으면 유효성 검사 통과
+  React.useEffect(() => {
+    const hasValidDistance =
+      data.activity_radius_km >= minKm && data.activity_radius_km <= maxKm;
+    onValidationChange(hasValidDistance);
+  }, [data.activity_radius_km, onValidationChange]);
+
   const handleDistanceChange = (distance: number) => {
-    onDataChange({ distance });
+    onDataChange({ activity_radius_km: distance });
     onValidationChange(true); // 거리는 항상 유효
   };
 
@@ -63,11 +70,11 @@ export default function DistanceStep({
         <SliderWrap>
           <ValueRow>
             <ValueText>
-              {data.distance}/{maxKm}km
+              {data.activity_radius_km}/{maxKm}km
             </ValueText>
           </ValueRow>
           <Slider
-            value={data.distance}
+            value={data.activity_radius_km}
             minimumValue={minKm}
             maximumValue={maxKm}
             step={1}

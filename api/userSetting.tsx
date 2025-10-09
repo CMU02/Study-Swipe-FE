@@ -88,6 +88,27 @@ export interface UpdateMajorResponse {
   message: string;
 }
 
+export interface UpdateParticipationInfoRequest {
+  period: number;
+  period_length: string;
+  start_time: string;
+  end_time: string;
+}
+
+export interface UpdateParticipationInfoResponse {
+  status_code: number;
+  message: string;
+}
+
+export interface UpdateRegionRequest {
+  region_id: string;
+}
+
+export interface UpdateRegionResponse {
+  status_code: number;
+  message: string;
+}
+
 /* 사용자 설정 API */
 // 대학교 정보 업데이트
 export const addUniversity = async (
@@ -115,6 +136,19 @@ export const updateMajor = async (
   return res.data;
 };
 
+// 지역 정보 업데이트
+export const updateRegion = async (
+  data: UpdateRegionRequest,
+  token: string
+): Promise<UpdateRegionResponse> => {
+  const res = await api.post("/profiles/region", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
 // 활동 반경 업데이트
 export const updateActivityRadius = async (
   data: UpdateActivityRadiusRequest,
@@ -134,6 +168,19 @@ export const updateGoalsNote = async (
   token: string
 ): Promise<UpdateGoalsNoteResponse> => {
   const res = await api.post("/profiles/goals-note", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
+// 참여 정보 업데이트
+export const updateParticipationInfo = async (
+  data: UpdateParticipationInfoRequest,
+  token: string
+): Promise<UpdateParticipationInfoResponse> => {
+  const res = await api.post("/profiles/participation-info", data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

@@ -33,8 +33,32 @@ export default function CollegeStep({
   onValidationChange,
 }: CollegeStepProps) {
   const handleCollegeChange = (college: string) => {
-    onDataChange({ college });
-    const hasUniversity = college.includes("대학교");
+    // 대학교와 전공을 분리
+    const trimmedCollege = college.trim();
+
+    // "대학교"를 기준으로 분리
+    const universityIndex = trimmedCollege.indexOf("대학교");
+
+    let universityName = "";
+    let major_name = "";
+
+    if (universityIndex !== -1) {
+      // "대학교"가 포함된 경우
+      universityName = trimmedCollege.substring(0, universityIndex + 3).trim(); // "대학교"까지 포함
+      major_name = trimmedCollege.substring(universityIndex + 3).trim(); // "대학교" 이후 부분
+    } else {
+      // "대학교"가 없는 경우 전체를 대학교명으로 처리
+      universityName = trimmedCollege;
+      major_name = "";
+    }
+
+    onDataChange({
+      universityName,
+      major_name,
+    });
+
+    const hasUniversity =
+      universityName.includes("대학교") || universityName.length > 0;
     onValidationChange(hasUniversity);
   };
 
@@ -43,7 +67,7 @@ export default function CollegeStep({
       <Question>학생의 대학교/전공을{"\n"}알려주세요.</Question>
       <Answer>
         <BrandTextField
-          value={data.college}
+          value={`${data.universityName} ${data.major_name}`.trim()}
           onChangeText={handleCollegeChange}
           placeholder="예) 서울대학교 컴퓨터공학과"
           autoCapitalize="none"

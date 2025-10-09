@@ -6,6 +6,7 @@ import SignUpScreen from "../screens/auth/SignUpScreen";
 import StudentAuthScreen from "../screens/auth/StudentAuthScreen";
 import HomeScreen from "../screens/feed/HomeScreen";
 import UserSettingContainer from "../screens/useSetting/UserSettingContainer";
+import To from "../screens/notification/To";
 
 export type StackList = {
   Starting: undefined;
@@ -15,6 +16,7 @@ export type StackList = {
   StudentVerify: { user_id: string };
   UserSetting: undefined;
   Home: undefined;
+  Talk: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackList>();
@@ -35,6 +37,7 @@ const AppNavigator = () => {
       <Stack.Screen name="StudentVerify" component={StudentAuthScreen} />
       <Stack.Screen name="UserSetting" component={UserSettingContainer} />
       <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Talk" component={To} />
     </Stack.Navigator>
   );
 };

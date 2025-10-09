@@ -113,3 +113,18 @@ export const agreeToTerms = async (
   const res = await api.post("/terms-of-use/agree", data);
   return res.data;
 };
+
+// 로그아웃 (토큰 삭제)
+export const logout = async (): Promise<boolean> => {
+  try {
+    const AsyncStorage =
+      require("@react-native-async-storage/async-storage").default;
+    await AsyncStorage.removeItem("accessToken");
+    await AsyncStorage.removeItem("refreshToken");
+    console.log("로그아웃 완료: 토큰이 삭제되었습니다.");
+    return true;
+  } catch (error) {
+    console.error("로그아웃 중 오류:", error);
+    return false;
+  }
+};

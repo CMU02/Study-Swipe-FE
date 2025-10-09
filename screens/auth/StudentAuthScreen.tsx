@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components/native";
 import { TouchableOpacity, Modal, Animated, Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import BrandHeader from "../../components/logo/BrandHeader";
 import BrandTextField from "../../components/input/BrandTextField";
 import PrimaryButton from "../../components/button/PrimaryButton";
@@ -159,15 +160,16 @@ const StudentAuthScreen = () => {
   const route = useRoute();
   const { user_id } = route.params as { user_id: string };
 
-  // user_id 값 정상적으로 넘어오는지 확인하기 위해 log 추후 삭제
-  console.log("StudentAuthScreen에서 받은 user_id:", user_id);
-
   // ----- 기존 인증 상태 -----
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [mailSent, setMailSent] = useState(false);
   const [verified, setVerified] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [authTokens, setAuthTokens] = useState<{
+    accessToken: string;
+    refreshToken: string;
+  } | null>(null);
 
   // 5분(300초) 타이머
   const DURATION = 5 * 60;
@@ -255,10 +257,14 @@ const StudentAuthScreen = () => {
       if (response.status_code === 200) {
         setVerified(true);
         if (timerRef.current) clearInterval(timerRef.current);
+
+        // 토큰을 임시로 저장 (약관 동의 완료 후 AsyncStorage에 저장)
+        setAuthTokens({
+          accessToken: response.option.data.accessToken,
+          refreshToken: response.option.data.refreshToken,
+        });
+
         Alert.alert("성공", response.message);
-        // TODO: 토큰 저장
-        console.log("Access Token:", response.option.data.accessToken);
-        console.log("Refresh Token:", response.option.data.refreshToken);
       }
     } catch (error: any) {
       Alert.alert(
@@ -326,6 +332,17 @@ const StudentAuthScreen = () => {
       });
 
       if (response.status_code === 200) {
+        // 약관 동의 완료 후 토큰 저장
+        if (authTokens) {
+          try {
+            await AsyncStorage.setItem("accessToken", authTokens.accessToken);
+            await AsyncStorage.setItem("refreshToken", authTokens.refreshToken);
+            console.log("✅ 토큰 저장 완료 (약관 동의 후)");
+          } catch (storageError) {
+            console.error("❌ 토큰 저장 실패:", storageError);
+          }
+        }
+
         Alert.alert("성공", response.message, [
           {
             text: "확인",
