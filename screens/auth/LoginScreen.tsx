@@ -11,7 +11,7 @@ import { StackList } from "../../navigation/AppNavigator";
 import BrandTextField from "../../components/input/BrandTextField";
 import { login } from "../../api/auth";
 
-const Screen = styled.SafeAreaView`
+const Screen = styled.View`
   flex: 1;
   background-color: #fff;
 `;

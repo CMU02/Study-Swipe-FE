@@ -10,7 +10,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackList } from "../../navigation/AppNavigator";
 import { register } from "../../api/auth";
 
-const Screen = styled.SafeAreaView`
+const Screen = styled.View`
   flex: 1;
   background-color: #fff;
 `;

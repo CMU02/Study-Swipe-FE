@@ -1,13 +1,10 @@
 import styled from "styled-components/native";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface BrandHeaderProps {
   onPressLogo?: () => void;
 }
-
-const Safe = styled.View`
-  background-color: #fff;
-`;
 
 const Bar = styled.View`
   height: 56px;
@@ -15,6 +12,7 @@ const Bar = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  background-color: #fff;
 `;
 
 const Logo = styled.Image`
@@ -23,6 +21,8 @@ const Logo = styled.Image`
 `;
 
 export default function BrandHeader({ onPressLogo }: BrandHeaderProps) {
+  const insets = useSafeAreaInsets(); // ✅ 안전영역 가져오기
+
   const logo = (
     <Logo
       source={require("../../assets/images/logo.png")}
@@ -31,7 +31,12 @@ export default function BrandHeader({ onPressLogo }: BrandHeaderProps) {
   );
 
   return (
-    <Safe>
+    <View
+      style={{
+        backgroundColor: "#fff",
+        paddingTop: insets.top, // ✅ 상단 여백 추가
+      }}
+    >
       <Bar>
         {onPressLogo ? (
           <TouchableOpacity activeOpacity={0.8} onPress={onPressLogo}>
@@ -41,6 +46,6 @@ export default function BrandHeader({ onPressLogo }: BrandHeaderProps) {
           logo
         )}
       </Bar>
-    </Safe>
+    </View>
   );
 }

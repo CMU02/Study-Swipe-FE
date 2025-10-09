@@ -25,7 +25,7 @@ import {
 
 /* ----------------- Layout ----------------- */
 
-const Screen = styled.SafeAreaView`
+const Screen = styled.View`
   flex: 1;
   background-color: #fff;
 `;

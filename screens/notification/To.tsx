@@ -7,7 +7,7 @@ import BottomTabBar from "../../components/BottomTabBar";
 import { clickColor, secondaryColor, textColor } from "../../styles/Color";
 import TagBox from "../../components/TagBox";
 
-const Screen = styled.SafeAreaView`
+const Screen = styled.View`
   flex: 1;
   background-color: #fff;
 `;

@@ -15,7 +15,7 @@ import TopTabs from "../../components/TopTabs";
 import DevButton from "../../components/DevButton";
 
 /* ───────────── Styled ───────────── */
-const Screen = styled.SafeAreaView`
+const Screen = styled.View`
   flex: 1;
   background-color: #fff;
 `;
