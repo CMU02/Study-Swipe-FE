@@ -54,7 +54,7 @@ const StyledInput = styled.TextInput<{
   $padRight: number; // 오른쪽에 아이콘/버튼 있을 때 padding-right 가변
 }>`
   font-size: 15px;
-  font-family: "Paperlogy-SemiBold";
+  font-family: Paperlogy-SemiBold;
   width: 100%;
   height: 48px;
   padding: 0 ${({ $padRight }) => $padRight}px 0 14px;
@@ -95,15 +95,20 @@ const RightBtnText = styled.Text`
 `;
 
 /** 버튼 왼쪽에 겹쳐지는 인라인 텍스트(예: 05:00) */
-const InlineRightText = styled.Text<{ $color: string }>`
+const InlineRightText = styled.View<{ $color: string }>`
   position: absolute;
-  right: 84px; /* 버튼 padding(14*2) + 모서리 여백 고려 */
+  right: 70px; /* 버튼과의 간격을 줄임 */
   top: 0;
   bottom: 0;
-  text-align-vertical: center;
-  font-size: 12px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const InlineTextContent = styled.Text<{ $color: string }>`
+  font-size: 16px;
   font-family: "Paperlogy-SemiBold";
   color: ${({ $color }) => $color};
+  text-align: center;
 `;
 
 /* ---------- component ---------- */
@@ -144,7 +149,7 @@ export default function AppTextField({
   }, [secureToggle, hidden]);
 
   const rightIcon = useMemo(() => {
-    if (showEye) return hidden ? "eye" : "eye-off";
+    if (showEye) return hidden ? "eye-off" : "eye";
     return rightIconName;
   }, [showEye, hidden, rightIconName]);
 
@@ -181,7 +186,9 @@ export default function AppTextField({
       {/* ⏱️ 버튼 왼쪽 인라인 텍스트(예: '05:00') */}
       {hasRightButton && !!rightInlineText && (
         <InlineRightText $color={rightInlineTextColor}>
-          {rightInlineText}
+          <InlineTextContent $color={rightInlineTextColor}>
+            {rightInlineText}
+          </InlineTextContent>
         </InlineRightText>
       )}
 

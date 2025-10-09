@@ -11,9 +11,11 @@ import BrandHeader from "../../components/logo/BrandHeader";
 import StudyCard from "../../components/StudyCard";
 import BottomTabBar from "../../components/BottomTabBar";
 import TopTabs from "../../components/TopTabs";
+// 하단 주석과 동일하게 개발용 토큰 삭제버튼
+import DevButton from "../../components/DevButton";
 
 /* ───────────── Styled ───────────── */
-const Screen = styled.View`
+const Screen = styled.SafeAreaView`
   flex: 1;
   background-color: #fff;
 `;
@@ -331,6 +333,9 @@ const HomeScreen = () => {
       </Wrap>
 
       <BottomTabBar />
+
+      {/* 저장된 토큰 삭제를 위한 임시 삭제 버튼 개발버전 이후 삭제(./utils) */}
+      <DevButton />
     </Screen>
   );
 };
