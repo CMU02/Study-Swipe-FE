@@ -28,7 +28,7 @@ const Container = styled.View`
 
 const Title = styled.Text`
   font-size: 40px;
-  font-family: "Paperlogy-SemiBold";
+  font-family: Paperlogy-SemiBold;
   margin: 16px 0 20px;
 `;
 

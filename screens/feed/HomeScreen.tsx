@@ -13,6 +13,9 @@ import BottomTabBar from "../../components/BottomTabBar";
 import TopTabs from "../../components/TopTabs";
 // 하단 주석과 동일하게 개발용 토큰 삭제버튼
 import DevButton from "../../components/DevButton";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackList } from "../../navigation/AppNavigator";
 
 /* ───────────── Styled ───────────── */
 const Screen = styled.View`
@@ -44,11 +47,10 @@ const HScroll = styled(Animated.ScrollView).attrs({
 `;
 
 /* ───────────── Types & Constants ───────────── */
-type TopKey = "TODAY" | "HOT" | "DISCOVER";
+type TopKey = "TODAY" | "DISCOVER";
 
 const TOP_TABS: { key: TopKey; label: string }[] = [
   { key: "TODAY", label: "TODAY" },
-  { key: "HOT", label: "HOT" },
   { key: "DISCOVER", label: "DISCOVER" },
 ];
 
@@ -201,6 +203,8 @@ const HomeScreen = () => {
   const scrollRef = useRef<ScrollView | null>(null); // 👈 탭 전환 시 맨 앞으로 스크롤
   const { width } = useWindowDimensions();
 
+  const navi = useNavigation<NativeStackNavigationProp<StackList>>();
+
   // layout constants
   const horizontalPadding = 16;
   const cardGap = 14;
@@ -226,12 +230,6 @@ const HomeScreen = () => {
 
   /** 탭에 따라 보여줄 카드 목록 계산 */
   const displayedCards = useMemo(() => {
-    if (activeTopTab === "HOT") {
-      // HOT : 인기순 - 북마크 많이 한 순서? (좋아요할지 고민)
-      return [...CARDS].sort(
-        (a, b) => (b.popularity ?? 0) - (a.popularity ?? 0)
-      );
-    }
     if (activeTopTab === "DISCOVER") {
       // DISCOVER : 전체
       return CARDS;
@@ -323,6 +321,7 @@ const HomeScreen = () => {
                       details={c.details}
                       badges={c.badges}
                       tags={c.tags}
+                      onPressCta={() => navi.navigate("Talk")}
                     />
                   </Animated.View>
                 );

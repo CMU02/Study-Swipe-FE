@@ -4,7 +4,7 @@ import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import type { NavigationProp } from "@react-navigation/native";
-import { secondaryColor } from "../styles/Color";
+import { secondaryColor, textColor } from "../styles/Color";
 
 /** 탭 정의: 라우트 이름만 실제 네비게이터 등록명과 일치시키면 됨 */
 const TABS: Array<{
@@ -18,7 +18,7 @@ const TABS: Array<{
   { key: "user", route: "Profile", icon: "user" },
 ];
 
-const ACTIVE_COLOR = "#000";
+const ACTIVE_COLOR = textColor;
 
 const Container = styled.View`
   padding: 10px 24px;
@@ -49,7 +49,7 @@ const Badge = styled.View`
 const BadgeText = styled.Text`
   color: #fff;
   font-size: 10px;
-  font-family: "Paperlogy-SemiBold";
+  font-family: Paperlogy-SemiBold;
 `;
 
 /** 중첩 네비게이터의 최하위 활성 라우트 이름 추출 */

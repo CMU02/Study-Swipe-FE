@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import StylePickButton from "../button/StylePickButton";
-import type { UserSettingData, StudyStyleStepProps } from "./types";
+import type { StudyStyleStepProps } from "./types";
 
 const Container = styled.View`
   flex: 1;

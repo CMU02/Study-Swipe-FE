@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, Text, Alert } from "react-native";
+import { Alert } from "react-native";
 import styled from "styled-components/native";
 import { clearAllTokens } from "../utils/devTools";
 

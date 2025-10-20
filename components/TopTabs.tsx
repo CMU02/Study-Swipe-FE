@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { LayoutChangeEvent } from "react-native";
 import styled from "styled-components/native";
+import { textColor } from "../styles/Color";
 
 const TabsRow = styled.View`
   position: relative;
@@ -18,14 +19,14 @@ const TabInner = styled.View`
 
 const TabText = styled.Text<{ active?: boolean }>`
   font-size: 20px;
-  font-family: "Paperlogy-SemiBold";
-  color: #000;
+  font-family: Paperlogy-SemiBold;
+  color: ${textColor};
   opacity: ${({ active }) => (active ? 1 : 0.55)};
 `;
 
 const UnderlineItem = styled.View<{ visible: boolean; widthPx: number }>`
   height: 2px;
-  background-color: #000;
+  background-color: ${textColor};
   border-radius: 10px;
   margin-top: 2px; /* 텍스트와의 간격 */
   width: ${({ widthPx }) => `${Math.max(1, widthPx)}px`};

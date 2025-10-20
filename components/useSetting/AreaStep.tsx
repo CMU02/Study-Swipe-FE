@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import Select from "../input/Select";
-import type { UserSettingData, AreaStepProps } from "./types";
+import type { AreaStepProps } from "./types";
 import { textColor } from "../../styles/Color";
 import { getRegionsCities, getSpecificCityRegion } from "../../api/area";
 import type { Region } from "../../api/types";

@@ -8,14 +8,12 @@ import PrimaryButton from "../../components/button/PrimaryButton";
 import {
   primaryColor,
   secondaryColor,
+  textColor,
   textOpacityColor,
   unClickColor,
 } from "../../styles/Color";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import {
-  NativeStackNavigationProp,
-  NativeStackScreenProps,
-} from "@react-navigation/native-stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackList } from "../../navigation/AppNavigator";
 import {
   sendVerificationCode,
@@ -44,9 +42,9 @@ const Container = styled.View`
 
 const Title = styled.Text`
   font-size: 28px;
-  font-family: "Paperlogy-SemiBold";
+  font-family: Paperlogy-SemiBold;
   line-height: 36px;
-  color: #000;
+  color: ${textColor};
   margin-bottom: 20px;
 `;
 
@@ -88,8 +86,8 @@ const SheetHeader = styled.View`
 
 const SheetTitle = styled.Text`
   font-size: 18px;
-  font-family: "Paperlogy-SemiBold";
-  color: #000;
+  font-family: Paperlogy-SemiBold;
+  color: ${textColor};
 `;
 
 const CloseBtn = styled.TouchableOpacity`
@@ -98,8 +96,8 @@ const CloseBtn = styled.TouchableOpacity`
 
 const CloseText = styled.Text`
   font-size: 18px;
-  font-family: "Paperlogy-SemiBold";
-  color: #000;
+  font-family: Paperlogy-SemiBold;
+  color: ${textColor};
 `;
 
 const TermRow = styled.View`
@@ -121,7 +119,7 @@ const Circle = styled.View<{ checked?: boolean }>`
   height: 18px;
   border-radius: 9px;
   border-width: 2px;
-  border-color: ${({ checked }) => (checked ? "#000" : "#ccc")};
+  border-color: ${({ checked }) => (checked ? textColor : "#ccc")};
   background-color: transparent;
   justify-content: center;
   align-items: center;
@@ -131,12 +129,12 @@ const InnerCircle = styled.View<{ checked?: boolean }>`
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: ${({ checked }) => (checked ? "#000" : "transparent")};
+  background-color: ${({ checked }) => (checked ? textColor : "transparent")};
 `;
 
 const TermLabel = styled.Text`
   font-size: 14px;
-  font-family: "Paperlogy-SemiBold";
+  font-family: Paperlogy-SemiBold;
 `;
 
 const ViewBtn = styled(TouchableOpacity)`
@@ -145,7 +143,7 @@ const ViewBtn = styled(TouchableOpacity)`
 
 const ViewText = styled.Text`
   color: ${textOpacityColor};
-  font-family: "Paperlogy-SemiBold";
+  font-family: Paperlogy-SemiBold;
 `;
 
 const SheetPrimaryBtnWrap = styled.View`
