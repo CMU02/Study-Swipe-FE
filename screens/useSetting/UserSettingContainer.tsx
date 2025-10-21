@@ -41,8 +41,9 @@ import StudyTagStep from "../../components/useSetting/StudyTagStep";
 import SurveyStep from "../../components/useSetting/SurveyStep";
 import StudyStyleStep from "../../components/useSetting/StudyStyleStep";
 import AdditionalStep from "../../components/useSetting/AdditionalStep";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const Container = styled.SafeAreaView`
+const Container = styled.View`
   flex: 1;
   background-color: #fff;
 `;
@@ -75,6 +76,7 @@ const NextButtonContainer = styled.View`
 const TOTAL_STEPS = 11;
 
 export default function UserSettingContainer() {
+  const insets = useSafeAreaInsets();
   const navigation = useNavigation<NativeStackNavigationProp<StackList>>();
   const [currentStep, setCurrentStep] = useState(1);
   const [isCurrentStepValid, setIsCurrentStepValid] = useState(false);
@@ -472,7 +474,7 @@ export default function UserSettingContainer() {
   };
 
   return (
-    <Container>
+    <Container style={{ paddingTop: insets.top }}>
       <ProgressBar
         currentStep={currentStep}
         totalSteps={TOTAL_STEPS}

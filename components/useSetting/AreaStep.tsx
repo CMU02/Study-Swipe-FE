@@ -53,6 +53,12 @@ export default function AreaStep({
     }
   }, [data.userArea_1]);
 
+  // 데이터 변경 시 validation 체크
+  useEffect(() => {
+    const isValid = !!data.userArea_1 && !!data.userArea_2 && !!data.regionId;
+    onValidationChange(isValid);
+  }, [data.userArea_1, data.userArea_2, data.regionId, onValidationChange]);
+
   const loadCities = async () => {
     try {
       const response = await getRegionsCities();
@@ -66,8 +72,17 @@ export default function AreaStep({
     try {
       const response = await getSpecificCityRegion(city);
       setRegions(response.option.meta_data.regions);
-      // 기존 선택된 지역 초기화
-      onDataChange({ userArea_2: "", regionId: "" });
+      // 첫 번째 지역이 변경될 때만 두 번째 지역 초기화
+      // 이미 같은 도시의 지역이 선택되어 있다면 유지
+      const currentRegionExists = response.option.meta_data.regions.some(
+        (region) =>
+          (region as any).regions_id === data.regionId ||
+          region.id === data.regionId
+      );
+
+      if (!currentRegionExists) {
+        onDataChange({ userArea_2: "", regionId: "" });
+      }
     } catch (error) {
       console.error("지역 목록 로드 실패:", error);
       setRegions([]);
@@ -76,7 +91,6 @@ export default function AreaStep({
 
   const handleArea1Change = (area1: string) => {
     onDataChange({ userArea_1: area1 as "서울특별시" | "경기도" });
-    onValidationChange(!!area1 && !!data.regionId);
   };
 
   const handleArea2Change = (area2: string) => {
@@ -85,11 +99,12 @@ export default function AreaStep({
     );
 
     if (selectedRegion) {
+      // API 응답에서 실제로는 regions_id로 오고 있음
+      const regionId = (selectedRegion as any).regions_id || selectedRegion.id;
       onDataChange({
         userArea_2: area2,
-        regionId: selectedRegion.id,
+        regionId: regionId,
       });
-      onValidationChange(!!data.userArea_1 && !!selectedRegion.id);
     }
   };
 
