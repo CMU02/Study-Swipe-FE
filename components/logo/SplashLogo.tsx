@@ -13,7 +13,7 @@ const TagLine = styled.Text`
   color: ${textColor};
   text-align: center;
   margin-bottom: 15px;
-  font-family: "Paperlogy-SemiBold";
+  font-family: Paperlogy-SemiBold;
 `;
 
 const Logo = styled.Image`

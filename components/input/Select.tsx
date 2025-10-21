@@ -1,12 +1,5 @@
 import React, { useMemo, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  LayoutChangeEvent,
-  Image,
-  ScrollView,
-} from "react-native";
+import { LayoutChangeEvent, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import { textOpacityColor } from "../../styles/Color";
 

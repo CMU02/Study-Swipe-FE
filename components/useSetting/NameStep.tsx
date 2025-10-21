@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import BrandTextField from "../input/BrandTextField";
 import GenderSelect from "../input/Select";
-import type { UserSettingData, NameStepProps } from "./types";
+import type { NameStepProps } from "./types";
 
 const Container = styled.View`
   flex: 1;

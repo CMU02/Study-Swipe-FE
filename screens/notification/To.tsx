@@ -31,7 +31,7 @@ const Info = styled.View`
 const InfoText = styled.Text`
   font-size: 15px;
   font-weight: 500;
-  font-family: "Paperlogy-SemiBold";
+  font-family: Paperlogy-SemiBold;
   color: ${textColor};
   margin-bottom: 10px;
 `;

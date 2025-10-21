@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import { ScrollView } from "react-native";
-import type { UserSettingData, SurveyStepProps } from "./types";
+import type { SurveyStepProps } from "./types";
 import { clickColor, textColor } from "../../styles/Color";
 
 const Container = styled.View`

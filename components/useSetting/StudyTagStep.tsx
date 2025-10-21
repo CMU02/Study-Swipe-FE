@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import BrandTextField from "../input/BrandTextField";
-import type { UserSettingData, StudyTagStepProps } from "./types";
+import type { StudyTagStepProps } from "./types";
 import { clickColor } from "../../styles/Color";
 
 const Container = styled.View`

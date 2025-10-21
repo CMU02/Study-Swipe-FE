@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import Slider from "@react-native-community/slider";
-import type { UserSettingData, DistanceStepProps } from "./types";
+import type { DistanceStepProps } from "./types";
 import { unClickColor, secondaryColor, textColor } from "../../styles/Color";
 
 const Container = styled.View`

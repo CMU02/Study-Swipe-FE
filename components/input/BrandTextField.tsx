@@ -90,7 +90,7 @@ const RightBtn = styled.TouchableOpacity<{ $bg: string; disabled?: boolean }>`
 
 const RightBtnText = styled.Text`
   color: #fff;
-  font-family: "Paperlogy-SemiBold";
+  font-family: Paperlogy-SemiBold;
   font-size: 14px;
 `;
 
@@ -106,7 +106,7 @@ const InlineRightText = styled.View<{ $color: string }>`
 
 const InlineTextContent = styled.Text<{ $color: string }>`
   font-size: 16px;
-  font-family: "Paperlogy-SemiBold";
+  font-family: Paperlogy-SemiBold;
   color: ${({ $color }) => $color};
   text-align: center;
 `;
@@ -129,7 +129,7 @@ export default function AppTextField({
 
   rightButtonLabel,
   onPressRightButton,
-  rightButtonColor = "#000",
+  rightButtonColor = "${textColor}",
   rightButtonDisabled,
 
   rightInlineText,

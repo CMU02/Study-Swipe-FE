@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { clickColor, unClickColor } from "../../styles/Color";
+import { unClickColor } from "../../styles/Color";
 
 interface PrimaryButtonProps {
   // 버튼 글자

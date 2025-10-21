@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import BrandTextField from "../input/BrandTextField";
-import type { UserSettingData, BirthStepProps } from "./types";
+import type { BirthStepProps } from "./types";
 
 const Container = styled.View`
   flex: 1;

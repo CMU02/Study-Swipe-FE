@@ -4,7 +4,7 @@ import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BrandHeader from "../../components/logo/BrandHeader";
 import PrimaryButton from "../../components/button/PrimaryButton";
-import { primaryColor } from "../../styles/Color";
+import { primaryColor, textColor } from "../../styles/Color";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackList } from "../../navigation/AppNavigator";
@@ -29,9 +29,9 @@ const Container = styled.View`
 
 const Title = styled.Text`
   font-size: 40px;
-  font-family: "Paperlogy-SemiBold";
+  font-family: Paperlogy-SemiBold;
   margin: 16px 0 20px;
-  color: #000;
+  color: ${textColor};
 `;
 
 // 입력 필드들을 묶어서 gap으로 간격 관리
@@ -51,14 +51,14 @@ const LinksRow = styled.View`
 
 const LinkText = styled.Text`
   font-size: 12px;
-  font-family: "Paperlogy-SemiBold";
-  color: #000;
+  font-family: Paperlogy-SemiBold;
+  color: ${textColor};
 `;
 
 const Divider = styled.Text`
   font-size: 12px;
-  font-family: "Paperlogy-SemiBold";
-  color: #000;
+  font-family: Paperlogy-SemiBold;
+  color: ${textColor};
   opacity: 0.5;
 `;
 
