@@ -24,7 +24,6 @@ export interface StudyDetails {
   school?: string; // 대학교/전공
   location?: string; // 선호지역
   time?: string; // 선호시간대
-  days?: string; // 선호요일대
   freq?: string; // 선호 횟수
   age?: string; // 나이
 }
@@ -57,6 +56,11 @@ const CARD_HEIGHT = windowHeight * 0.6;
 
 const CardRoot = styled.View`
   width: 100%;
+  shadow-color: #000;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
 `;
 
 const CardBox = styled.View`
@@ -65,6 +69,11 @@ const CardBox = styled.View`
   border-radius: 8px;
   background-color: #fff;
   height: ${CARD_HEIGHT}px;
+  shadow-color: #000;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
 `;
 
 const Cover = styled(ImageBackground)`
@@ -79,12 +88,17 @@ const BackRoot = styled.View`
   height: 100%;
   background: ${thirdColor};
   border-radius: 8px;
+  shadow-color: #000;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
 `;
 
-/* 스크롤 제거 → 본문 전체를 누르면 앞면으로 복귀 */
 const BackBody = styled(Pressable)`
   flex: 1;
-  padding: 16px;
+  padding: 20px;
+  padding-bottom: 80px;
 `;
 
 const BadgeTopRight = styled.View`
@@ -102,12 +116,11 @@ const BadgeIcon = styled.View`
   background: ${thirdColor};
   align-items: center;
   justify-content: center;
-
   shadow-color: #000;
-  shadow-opacity: 0.1;
-  shadow-radius: 6px;
-  shadow-offset: 0px 3px;
-  elevation: 3;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
 `;
 
 const CaptionWrap = styled.View`
@@ -118,40 +131,42 @@ const CaptionWrap = styled.View`
   border-radius: 14px;
   background: #fff;
   padding: 14px 14px 16px;
-
   shadow-color: #000;
-  shadow-opacity: 0.14;
-  shadow-radius: 10px;
-  shadow-offset: 0px 4px;
-  elevation: 4;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
 `;
 
 const TitleRow = styled.View`
   flex-direction: row;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
+  margin-bottom: 0px;
 `;
 
 const TitleText = styled.Text`
-  flex: 1;
-  font-size: 20px;
+  font-size: 35px;
   font-family: Paperlogy-SemiBold;
   color: ${textColor};
+  line-height: 41px;
+`;
+
+const TitleDivider = styled.View`
+  width: 2px;
+  height: 15px;
+  background-color: ${textColor};
+  margin: 0px 10px 0px 10px;
 `;
 
 const SmallLabel = styled.Text`
-  padding: 2px 10px;
-  border-radius: 999px;
-  background: #f1f3f5;
-  font-size: 12px;
+  font-size: 18px;
   font-family: Paperlogy-SemiBold;
   color: ${textColor};
 `;
 
 const SubText = styled.Text`
-  margin-top: 6px;
-  font-size: 13px;
+  margin-top: 10px;
+  font-size: 15px;
   font-family: Paperlogy-SemiBold;
   color: ${textColor};
 `;
@@ -164,83 +179,82 @@ const DescText = styled.Text`
 `;
 
 const BackHeader = styled.Text`
-  font-size: 20px;
+  font-size: 30px;
   font-family: Paperlogy-SemiBold;
   color: ${textColor};
-  margin-bottom: 12px;
+  margin-bottom: 30px;
+  line-height: 35px;
 `;
 
 const Line = styled.Text`
-  font-size: 13px;
+  font-size: 15px;
   font-family: Paperlogy-SemiBold;
   color: ${textColor};
-  line-height: 20px;
-  margin-bottom: 2px;
+  line-height: 18px;
+  margin-bottom: 15px;
 `;
 
 const ChipsRow = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
+  gap: 5px;
+  margin-bottom: 6px;
 `;
 
 const ChipBox = styled.View`
-  padding: 3px 5px;
+  padding: 5px;
   border-radius: 8px;
   background: ${secondaryColorOpacity};
   shadow-color: #000;
-  shadow-opacity: 0.12;
-  shadow-radius: 6px;
-  shadow-offset: 0px 3px;
-  elevation: 3;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
 `;
 
 const ChipText = styled.Text`
-  font-size: 12px;
+  font-size: 15px;
   font-family: Paperlogy-SemiBold;
   color: #fff;
 `;
 
 const TagChipBox = styled.View`
-  padding: 3px 5px;
+  padding: 5px;
   border-radius: 8px;
   background: ${clickColorOpacity};
   shadow-color: #000;
-  shadow-opacity: 0.1;
-  shadow-radius: 5px;
-  shadow-offset: 0px 2px;
-  elevation: 2;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
 `;
 
 const TagChipText = styled.Text`
-  font-size: 11px;
+  font-size: 15px;
   font-family: Paperlogy-SemiBold;
   color: #fff;
 `;
 
 const BackFooter = styled.View`
   position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
 `;
 
 const CtaBtn = styled.TouchableOpacity`
-  height: 48px;
-  border-radius: 12px;
+  height: 58px;
+  border-radius: 8px;
   background: #fff;
   align-items: center;
   justify-content: center;
-
-  border: 1px solid rgba(0, 0, 0, 0.08);
-
+  flex-direction: row;
+  gap: 8px;
   shadow-color: #000;
-  shadow-opacity: 0.15;
-  shadow-radius: 6px;
-  shadow-offset: 0px -1px;
-
-  elevation: 2;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
 `;
 
 const CtaText = styled.Text`
@@ -296,9 +310,6 @@ export default function StudyCard(props: StudyCardProps) {
               {Boolean(details?.time) ? (
                 <Line>선호시간대 : {details!.time}</Line>
               ) : null}
-              {Boolean(details?.days) ? (
-                <Line>선호요일대 : {details!.days}</Line>
-              ) : null}
               {Boolean(details?.freq) ? (
                 <Line>선호 횟수 : {details!.freq}</Line>
               ) : null}
@@ -307,7 +318,7 @@ export default function StudyCard(props: StudyCardProps) {
               ) : null}
 
               {Array.isArray(badges) && badges.length > 0 ? (
-                <ChipsRow>
+                <ChipsRow style={{ marginTop: 20 }}>
                   {badges.map((b, i) => (
                     <ChipBox key={`${b}-${i}`}>
                       <ChipText>{b}</ChipText>
@@ -325,9 +336,6 @@ export default function StudyCard(props: StudyCardProps) {
                   ))}
                 </ChipsRow>
               ) : null}
-
-              {/* 버튼 높이만큼 여백 */}
-              <View style={{ height: 72 }} />
             </BackBody>
 
             {/* 하단 고정 CTA (본문 탭과 충돌 없음) */}
@@ -337,6 +345,9 @@ export default function StudyCard(props: StudyCardProps) {
                 activeOpacity={0.8}
                 onPress={onPressCta ?? (() => {})}
               >
+                {variant === "edit" && (
+                  <Feather name="edit-2" size={20} color={textColor} />
+                )}
                 <CtaText>{resolvedLabel}</CtaText>
               </CtaBtn>
             </BackFooter>
@@ -370,7 +381,10 @@ export default function StudyCard(props: StudyCardProps) {
                 <TitleRow>
                   <TitleText numberOfLines={1}>{title}</TitleText>
                   {Boolean(smallLabel) ? (
-                    <SmallLabel>{smallLabel}</SmallLabel>
+                    <>
+                      <TitleDivider />
+                      <SmallLabel>{smallLabel}</SmallLabel>
+                    </>
                   ) : null}
                 </TitleRow>
 

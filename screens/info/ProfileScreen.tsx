@@ -1,281 +1,154 @@
-// app/screens/profile/ProfileScreen.tsx
 import React, { useMemo, useState, useCallback, useEffect } from "react";
-import {
-  useWindowDimensions,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import styled from "styled-components/native";
+import { useWindowDimensions, ScrollView, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import BrandHeader from "../../components/logo/BrandHeader";
 import StudyCard from "../../components/StudyCard";
 import BottomTabBar from "../../components/BottomTabBar";
 import TopTabs from "../../components/TopTabs";
+import { textColor, textOpacityColor } from "../../styles/Color";
+import { getMyProfile } from "../../api/profile";
+import { getAuthToken, removeAuthToken } from "../../utils/auth";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackList } from "../../navigation/AppNavigator";
+import type { MyProfile } from "../../api/types/profile";
+import type { TopKey, StudyTagData } from "./types";
+import { TOP_TABS, LAYOUT_CONSTANTS } from "./constants";
 import {
-  clickColor,
-  primaryColor,
-  secondaryColor,
-  textColor,
-  textOpacityColor,
-  thirdColor,
-} from "../../styles/Color";
-
-/* ───────────── Styled ───────────── */
-const Screen = styled.View`
-  flex: 1;
-  background-color: #fff;
-`;
-
-const Wrap = styled.View`
-  flex: 1;
-`;
-
-const Container = styled.View`
-  flex: 1;
-`;
-
-const Row = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
-const TogglePress = styled.TouchableOpacity``;
-
-const Pill = styled.View<{ active: boolean }>`
-  width: 27px;
-  height: 17px;
-  border-radius: 24px;
-  border-width: 2px;
-  border-color: ${textColor};
-  background-color: ${({ active }) => (active ? primaryColor : secondaryColor)};
-  padding: 3px;
-  justify-content: center;
-`;
-
-const Knob = styled.View<{ active: boolean }>`
-  width: 7px;
-  height: 7px;
-  border-radius: 3.5px;
-  background-color: ${textColor};
-  align-self: ${({ active }) => (active ? "flex-end" : "flex-start")};
-`;
-
-const Center = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-`;
-
-const CardWrap = styled.View<{ w: number }>`
-  width: ${({ w }) => w}px;
-`;
-
-/* ───────────── Setting UI ───────────── */
-const Section = styled.View`
-  width: 100%;
-  padding: 8px 0px;
-`;
-
-const SectionTitle = styled.Text`
-  font-size: 20px;
-  font-family: Paperlogy-SemiBold;
-  color: ${textColor};
-  margin-bottom: 5px;
-`;
-
-const Card = styled.View`
-  background: ${thirdColor};
-  border-radius: 8px;
-  padding: 10px 12px;
-  gap: 12px;
-
-  shadow-color: #000;
-  shadow-offset: 0px 2px;
-  shadow-opacity: 0.15;
-  shadow-radius: 4px;
-  elevation: 3;
-`;
-
-const Line = styled.Text`
-  font-family: Paperlogy-SemiBold;
-  font-size: 15px;
-  color: ${textColor};
-`;
-
-const SmallLine = styled(Line)`
-  font-size: 10px;
-  margin-top: -7px;
-`;
-
-const BtnRow = styled.View`
-  flex-direction: row;
-  gap: 8px;
-`;
-
-const SmallBtn = styled.TouchableOpacity<{ tone?: "click" | "secondary" }>`
-  padding: 8px 12px;
-  border-radius: 8px;
-  background-color: ${({ tone }) =>
-    tone === "secondary" ? secondaryColor : clickColor};
-`;
-
-const SmallBtnText = styled.Text`
-  font-family: Paperlogy-SemiBold;
-  font-size: 15px;
-  color: ${textColor};
-`;
-
-/* 태그 편집 행 */
-const TagCard = styled(Card)`
-  gap: 8px;
-`;
-
-const TagRow = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  background: #fff;
-  border-width: 2px;
-  border-color: ${textColor};
-  border-radius: 10px;
-  padding: 10px 12px;
-`;
-
-const TagLeft = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-`;
-
-const TagNo = styled.Text`
-  font-family: Paperlogy-SemiBold;
-  font-size: 16px;
-  color: ${textColor};
-  width: 22px; /* 번호 칸 고정 */
-`;
-
-const TagText = styled.Text`
-  font-family: Paperlogy-SemiBold;
-  font-size: 15px;
-  color: ${textColor};
-`;
-
-const TagInput = styled.TextInput`
-  flex: 1;
-  font-family: Paperlogy-SemiBold;
-  font-size: 15px;
-  color: ${textColor};
-  padding-vertical: 4px;
-`;
-
-const IconBtn = styled(TouchableOpacity)`
-  padding: 6px;
-  border-radius: 8px;
-  margin-left: 8px;
-`;
-
-/* ───────────── Types & Dummy ───────────── */
-type TopKey = "MY" | "SETTING";
-
-type StudyTag = { tag_name: string; priority: number };
-type StudyTagData = { study_tags: StudyTag[] };
-
-const TOP_TABS: { key: TopKey; label: string }[] = [
-  { key: "MY", label: "My Profile" },
-  { key: "SETTING", label: "Profile Setting" },
-];
-
-const MY_PROFILE = {
-  image: {
-    uri: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=1200",
-  },
-  title: "#프론트 엔드",
-  smallLabel: "피어",
-  subtitle: "서울대학교 컴퓨터공학과",
-  description: "소개 : 간단한 프로젝트 함께 진행해보고 싶습니다.",
-  showAlert: true,
-  bookmarked: true,
-  details: {
-    purpose: "전공 공부 및 포트폴리오 작성",
-    school: "서울대학교 컴퓨터공학과",
-    location: "경기도 안양시",
-    time: "오후 7시 ~ 9시",
-    days: "주중",
-    freq: "주 2회, 3개월",
-    age: "만 23세/남",
-  },
-  badges: ["2~3인", "흡연자X", "피어", "같이 선호"],
-  // 초기 태그(표시용)
-  tags: ["프론트 엔드", "백엔드", "풀스택", "자바스크립트", "자료구조"],
-};
-
-/* 번호(①~⑤) 유니코드 헬퍼 */
-const circled = (i: number) => {
-  // 1~20 범위 지원 (①=U+2460)
-  if (i >= 1 && i <= 20) return String.fromCharCode(0x2460 + (i - 1));
-  return `${i}.`;
-};
+  getCircledNumber,
+  transformProfileData,
+  sortTagsByPriority,
+  transformApiTagsToLocal,
+} from "./utils";
+import {
+  Screen,
+  Wrap,
+  Container,
+  ProfileRow as Row,
+  ProfileCenter as Center,
+  CardWrap,
+  Section,
+  SectionTitle,
+  Card,
+  Line,
+  SmallLine,
+  BtnRow,
+  SmallBtn,
+  SmallBtnText,
+  TagCard,
+  TagRow,
+  TagLeft,
+  TagNo,
+  TagText,
+  TagInput,
+  IconBtn,
+} from "./styles";
 
 /* ───────────── Screen ───────────── */
 const ProfileScreen = () => {
   const [activeTopTab, setActiveTopTab] = useState<TopKey>("MY");
-  const [isPublic, setIsPublic] = useState<boolean>(true);
+  const navigation = useNavigation<NativeStackNavigationProp<StackList>>();
+
   const { width } = useWindowDimensions();
+
+  // API 데이터 상태
+  const [profileData, setProfileData] = useState<MyProfile | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // 태그 데이터 (설정에서 편집)
   const [tagData, setTagData] = useState<StudyTagData>(() => ({
-    study_tags: (MY_PROFILE.tags || [])
-      .slice(0, 5)
-      .map((t, idx) => ({ tag_name: t, priority: idx + 1 })),
+    study_tags: [],
   }));
 
   // 인라인 편집 상태
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingText, setEditingText] = useState<string>("");
 
-  const horizontalPadding = 16;
-  const peekRight = 64;
   const cardWidth = useMemo(
-    () => width - horizontalPadding * 2 - peekRight,
+    () =>
+      width -
+      LAYOUT_CONSTANTS.HORIZONTAL_PADDING * 2 -
+      LAYOUT_CONSTANTS.PEEK_RIGHT,
     [width]
   );
 
+  // 프로필 데이터 로드
   useEffect(() => {
-    // TODO: get initial visibility from API/AsyncStorage
+    loadProfileData();
   }, []);
 
-  const toggleVisibility = useCallback(() => {
-    setIsPublic((p) => {
-      const next = !p;
-      // TODO: persist next to API/AsyncStorage
-      return next;
-    });
-  }, []);
+  const loadProfileData = async () => {
+    try {
+      setIsLoading(true);
+      const token = await getAuthToken();
+
+      if (!token) {
+        Alert.alert("오류", "인증 토큰이 없습니다. 다시 로그인해주세요.");
+        return;
+      }
+
+      const response = await getMyProfile(token);
+      const profile = response.option.meta_data.profile;
+      setProfileData(profile);
+
+      // API에서 받은 study_tags 데이터를 설정
+      if (profile.study_tags && profile.study_tags.length > 0) {
+        setTagData({
+          study_tags: transformApiTagsToLocal(profile.study_tags),
+        });
+      }
+    } catch (error) {
+      console.error("프로필 로드 실패:", error);
+      Alert.alert("오류", "프로필 정보를 불러오는데 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleEditPress = useCallback(() => {
     setActiveTopTab("SETTING");
   }, []);
 
-  // StudyTagStep 콜백들 (미리보기 반영)
-  const handleTagDataChange = useCallback((partial: StudyTagData) => {
-    setTagData(partial);
-  }, []);
-
-  const handleValidate = useCallback((valid: boolean) => {
-    // 필요시 저장 버튼 활성화 제어 가능
-  }, []);
+  // 로그아웃 처리
+  const handleLogout = useCallback(async () => {
+    Alert.alert("로그아웃", "정말 로그아웃하시겠습니까?", [
+      { text: "취소", style: "cancel" },
+      {
+        text: "로그아웃",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await removeAuthToken();
+            Alert.alert("로그아웃", "로그아웃되었습니다.", [
+              {
+                text: "확인",
+                onPress: () => {
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: "Starting" }],
+                  });
+                },
+              },
+            ]);
+          } catch (error) {
+            console.error("로그아웃 실패:", error);
+            Alert.alert("오류", "로그아웃 중 오류가 발생했습니다.");
+          }
+        },
+      },
+    ]);
+  }, [navigation]);
 
   // 화면에 보여줄 태그 문자열 배열 (우선순위 순)
   const displayTags = useMemo(
-    () =>
-      tagData.study_tags
-        .slice()
-        .sort((a, b) => a.priority - b.priority)
-        .map((t) => t.tag_name),
+    () => sortTagsByPriority(tagData.study_tags),
     [tagData.study_tags]
+  );
+
+  // 프로필 데이터를 화면 표시용으로 변환
+  const displayProfile = useMemo(
+    () => transformProfileData(profileData, displayTags),
+    [profileData, displayTags]
   );
 
   /* ───────────── 인라인 편집 로직 ───────────── */
@@ -347,20 +220,12 @@ const ProfileScreen = () => {
     <Screen>
       <BrandHeader />
 
-      {/* 탭 + 공개 토글 */}
-      <Row>
-        <TopTabs
-          items={TOP_TABS}
-          activeKey={activeTopTab}
-          onChange={(k) => setActiveTopTab(k as TopKey)}
-          showUnderline
-        />
-        <TogglePress onPress={toggleVisibility} activeOpacity={0.8}>
-          <Pill active={isPublic}>
-            <Knob active={isPublic} />
-          </Pill>
-        </TogglePress>
-      </Row>
+      <TopTabs
+        items={TOP_TABS}
+        activeKey={activeTopTab}
+        onChange={(k) => setActiveTopTab(k as TopKey)}
+        showUnderline
+      />
 
       <Wrap>
         <Container>
@@ -368,15 +233,15 @@ const ProfileScreen = () => {
             <Center>
               <CardWrap w={cardWidth}>
                 <StudyCard
-                  image={MY_PROFILE.image}
-                  title={MY_PROFILE.title}
-                  smallLabel={MY_PROFILE.smallLabel}
-                  subtitle={MY_PROFILE.subtitle}
-                  description={MY_PROFILE.description}
-                  showAlert={MY_PROFILE.showAlert}
-                  bookmarked={MY_PROFILE.bookmarked}
-                  details={MY_PROFILE.details}
-                  badges={MY_PROFILE.badges}
+                  image={displayProfile.image}
+                  title={displayProfile.title}
+                  smallLabel={displayProfile.smallLabel}
+                  subtitle={displayProfile.subtitle}
+                  description={displayProfile.description}
+                  showAlert={displayProfile.showAlert}
+                  bookmarked={displayProfile.bookmarked}
+                  details={displayProfile.details}
+                  badges={displayProfile.badges}
                   tags={displayTags.map((t, i) => `#${i + 1} ${t}`)}
                   variant="edit"
                   onPressCta={handleEditPress}
@@ -394,16 +259,18 @@ const ProfileScreen = () => {
               <Section>
                 <Card>
                   <SectionTitle>계정 정보</SectionTitle>
-                  <SmallLine>아이디 : Design Test</SmallLine>
+                  <SmallLine>
+                    아이디 : {profileData?.user.user_id || "로딩중"}
+                  </SmallLine>
                   <SmallLine style={{ marginBottom: 0 }}>
-                    이메일 : Design Test @ email.study-swipe.ac.kr
+                    이메일 : {profileData?.user.email || "로딩중"}
                   </SmallLine>
                   <BtnRow>
-                    <SmallBtn tone="click">
-                      <SmallBtnText>비밀번호 변경하기</SmallBtnText>
-                    </SmallBtn>
                     <SmallBtn tone="secondary">
-                      <SmallBtnText>계정 탈퇴하기</SmallBtnText>
+                      <SmallBtnText>탈퇴하기</SmallBtnText>
+                    </SmallBtn>
+                    <SmallBtn tone="click" onPress={handleLogout}>
+                      <SmallBtnText>로그아웃</SmallBtnText>
                     </SmallBtn>
                   </BtnRow>
                 </Card>
@@ -413,15 +280,64 @@ const ProfileScreen = () => {
               <Section>
                 <Card>
                   <SectionTitle>스터디 정보</SectionTitle>
-                  <Line>선호지역 : 경기도 안양시</Line>
-                  <Line>선호시간대 : 오후 7시 ~ 9시</Line>
-                  <Line>선호요일대 : 주중</Line>
-                  <Line>선호 횟수 : 주 2회, 3개월</Line>
-                  <Line>목적 : 전공 공부 및 포트폴리오 작성</Line>
-                  <Line>스터디 스타일 : 피어</Line>
-                  <Line>팀장 선호 여부 : 팀장</Line>
-                  <Line>흡연 여부 : 흡연자</Line>
-                  <Line>스터디 모임 여부 : 멤버 선호</Line>
+                  <Line>이름 : {profileData?.display_name || "로딩중"}</Line>
+                  <Line>
+                    나이 : {profileData ? `만 ${profileData.age}세` : "로딩중"}
+                  </Line>
+                  <Line>
+                    성별 :{" "}
+                    {profileData
+                      ? profileData.gender === "남성"
+                        ? "남성"
+                        : "여성 "
+                      : "로딩중"}
+                  </Line>
+                  <Line>
+                    대학교/전공 :{" "}
+                    {profileData
+                      ? `${profileData.user.universities.university_name} ${profileData.major.name}`
+                      : "로딩중"}
+                  </Line>
+                  <Line>
+                    선호지역 :{" "}
+                    {profileData
+                      ? `${profileData.region.city_first} ${
+                          profileData.region.city_second || ""
+                        }`.trim()
+                      : "로딩중"}
+                  </Line>
+                  <Line>
+                    선호시간대 :{" "}
+                    {profileData
+                      ? `${profileData.participation_info.start_time} ~ ${profileData.participation_info.end_time}`
+                      : "로딩중"}
+                  </Line>
+                  <Line>
+                    선호 횟수 :{" "}
+                    {profileData
+                      ? `주 ${profileData.participation_info.period}회, ${profileData.participation_info.period_length}`
+                      : "로딩중"}
+                  </Line>
+                  <Line>목적 : {profileData?.goals_note || "로딩중"}</Line>
+                  <Line>
+                    스터디 스타일 : {profileData?.collab_style.name || "로딩중"}
+                  </Line>
+                  <Line>
+                    흡연 여부 :{" "}
+                    {profileData
+                      ? profileData.smoking_status.name === "비흡연"
+                        ? "비흡연자"
+                        : "흡연자"
+                      : "로딩중"}
+                  </Line>
+                  <Line>
+                    스터디 외 모임 여부 :{" "}
+                    {profileData
+                      ? profileData.social_pref.name === "네"
+                        ? "회식 등 팀 모임 선호"
+                        : "칼퇴 선호"
+                      : "로딩중"}
+                  </Line>
                 </Card>
               </Section>
 
@@ -430,13 +346,13 @@ const ProfileScreen = () => {
                 <TagCard>
                   <SectionTitle>과목 태그</SectionTitle>
 
-                  {[0, 1, 2, 3, 4].map((i) => {
+                  {LAYOUT_CONSTANTS.TAG_SLOTS.map((i) => {
                     const label = displayTags[i] ?? "";
                     const isEditing = editingIndex === i;
                     return (
                       <TagRow key={`tag-row-${i}`}>
                         <TagLeft>
-                          <TagNo>{circled(i + 1)}</TagNo>
+                          <TagNo>{getCircledNumber(i + 1)}</TagNo>
 
                           {isEditing ? (
                             <TagInput

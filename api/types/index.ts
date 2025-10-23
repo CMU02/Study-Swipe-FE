@@ -14,3 +14,6 @@ export * from "./tag";
 
 // 사용자 설정 관련 타입
 export * from "./userSetting";
+
+// 매칭 관련 타입
+export * from "./matching";

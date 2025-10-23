@@ -180,7 +180,7 @@ const labelsByTab: Record<
   },
 };
 
-export default function To() {
+export default function NotificationScreen() {
   const [activeTopTab, setActiveTopTab] = useState<TopKey>("TO");
 
   const goNextNotification = (key: TopKey) => {

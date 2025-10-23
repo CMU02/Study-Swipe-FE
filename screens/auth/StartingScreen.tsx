@@ -25,6 +25,7 @@ const StartingScreen = () => {
       if (accessToken) {
         // 토큰이 있으면 홈 화면으로 이동
         console.log("저장된 토큰 발견, 자동 로그인 진행");
+        console.log("로그인 토큰 값: " + accessToken);
         navi.navigate("Home");
       } else {
         // 토큰이 없으면 로그인 화면으로 이동

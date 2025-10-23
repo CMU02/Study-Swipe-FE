@@ -6,7 +6,7 @@ import SignUpScreen from "../screens/auth/SignUpScreen";
 import StudentAuthScreen from "../screens/auth/StudentAuthScreen";
 import HomeScreen from "../screens/feed/HomeScreen";
 import UserSettingContainer from "../screens/useSetting/UserSettingContainer";
-import To from "../screens/notification/To";
+import NotificationScreen from "../screens/notification/NotificationScreen";
 import ProfileScreen from "../screens/info/ProfileScreen";
 
 export type StackList = {
@@ -39,7 +39,7 @@ const AppNavigator = () => {
       <Stack.Screen name="StudentVerify" component={StudentAuthScreen} />
       <Stack.Screen name="UserSetting" component={UserSettingContainer} />
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Talk" component={To} />
+      <Stack.Screen name="Talk" component={NotificationScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
     </Stack.Navigator>
   );

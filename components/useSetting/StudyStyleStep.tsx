@@ -61,7 +61,7 @@ export default function StudyStyleStep({
         break;
       case "4인 이상":
         min_member_count = 4;
-        max_member_count = 10; // 최대값 설정
+        max_member_count = 10;
         break;
     }
 

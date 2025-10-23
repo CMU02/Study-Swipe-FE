@@ -13,6 +13,9 @@ export * from "./userSetting";
 // Tag API
 export * from "./tag";
 
+// Matching API
+export * from "./matching";
+
 // Types
 export * from "./types";
 

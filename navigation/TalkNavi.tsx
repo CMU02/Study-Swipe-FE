@@ -1,10 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import To from "../screens/notification/To";
-import From from "../screens/notification/from";
+import NotificationScreen from "../screens/notification/NotificationScreen";
 
 export type TalkStackList = {
-  To: undefined;
-  From: undefined;
+  Notification: undefined;
 };
 
 const Stack = createNativeStackNavigator<TalkStackList>();
@@ -12,11 +10,10 @@ const Stack = createNativeStackNavigator<TalkStackList>();
 const TalkNavi = () => {
   return (
     <Stack.Navigator
-      initialRouteName="To"
+      initialRouteName="Notification"
       screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen name="To" component={To} />
-      <Stack.Screen name="From" component={From} />
+      <Stack.Screen name="Notification" component={NotificationScreen} />
     </Stack.Navigator>
   );
 };

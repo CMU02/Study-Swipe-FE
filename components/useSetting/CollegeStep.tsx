@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import BrandTextField from "../input/BrandTextField";
 import type { CollegeStepProps } from "./types";
@@ -26,7 +26,29 @@ export default function CollegeStep({
   onDataChange,
   onValidationChange,
 }: CollegeStepProps) {
-  const handleCollegeChange = (college: string) => {
+  // 로컬 상태로 입력값 관리 (한글 조합 문제 해결)
+  const [inputValue, setInputValue] = useState(
+    `${data.universityName} ${data.major_name}`.trim()
+  );
+
+  // 디바운싱을 위한 useEffect
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      processCollegeInput(inputValue);
+    }, 300); // 300ms 디바운싱
+
+    return () => clearTimeout(timeoutId);
+  }, [inputValue]);
+
+  // 초기값 설정
+  useEffect(() => {
+    const initialValue = `${data.universityName} ${data.major_name}`.trim();
+    if (initialValue !== inputValue) {
+      setInputValue(initialValue);
+    }
+  }, [data.universityName, data.major_name]);
+
+  const processCollegeInput = (college: string) => {
     // 대학교와 전공을 분리
     const trimmedCollege = college.trim();
 
@@ -56,13 +78,17 @@ export default function CollegeStep({
     onValidationChange(hasUniversity);
   };
 
+  const handleInputChange = (text: string) => {
+    setInputValue(text);
+  };
+
   return (
     <Container>
       <Question>학생의 대학교/전공을{"\n"}알려주세요.</Question>
       <Answer>
         <BrandTextField
-          value={`${data.universityName} ${data.major_name}`.trim()}
-          onChangeText={handleCollegeChange}
+          value={inputValue}
+          onChangeText={handleInputChange}
           placeholder="예) 서울대학교 컴퓨터공학과"
           autoCapitalize="none"
           returnKeyType="done"

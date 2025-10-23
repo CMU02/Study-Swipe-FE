@@ -5,29 +5,36 @@ import {
   NativeSyntheticEvent,
   Animated,
   ScrollView,
+  Alert,
 } from "react-native";
 import styled from "styled-components/native";
 import BrandHeader from "../../components/logo/BrandHeader";
 import StudyCard from "../../components/StudyCard";
 import BottomTabBar from "../../components/BottomTabBar";
 import TopTabs from "../../components/TopTabs";
-// 하단 주석과 동일하게 개발용 토큰 삭제버튼
-import DevButton from "../../components/DevButton";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackList } from "../../navigation/AppNavigator";
+import { getMatchingByTag, getAllMatching } from "../../api/matching";
+import { getMyProfile } from "../../api/profile";
+import { getAuthToken } from "../../utils/auth";
+import { ymdSeed } from "./utils/dateUtils";
+import { seededShuffle } from "./utils/shuffleUtils";
+import {
+  transformMatchingProfileToCard,
+  type Card,
+} from "./utils/dataTransform";
+import { TOP_TABS, type TopKey } from "./types";
+
+import {
+  Screen,
+  Container,
+  LoadingWrap,
+  LoadingText,
+} from "../../styles/common";
 
 /* ───────────── Styled ───────────── */
-const Screen = styled.View`
-  flex: 1;
-  background-color: #fff;
-`;
-
 const Wrap = styled.View`
-  flex: 1;
-`;
-
-const Container = styled.View`
   flex: 1;
 `;
 
@@ -47,157 +54,14 @@ const HScroll = styled(Animated.ScrollView).attrs({
 `;
 
 /* ───────────── Types & Constants ───────────── */
-type TopKey = "TODAY" | "DISCOVER";
-
-const TOP_TABS: { key: TopKey; label: string }[] = [
-  { key: "TODAY", label: "TODAY" },
-  { key: "DISCOVER", label: "DISCOVER" },
-];
-
-/** 🔧 카드 타입에 popularity(인기 지표)와 id를 추가 */
-type Card = {
-  id: string;
-  popularity?: number;
-  image: { uri: string };
-  title: string;
-  smallLabel: string;
-  subtitle: string;
-  description: string;
-  showAlert: boolean;
-  bookmarked: boolean;
-  details: {
-    purpose?: string;
-    school?: string;
-    location?: string;
-    time?: string;
-    days?: string;
-    freq?: string;
-    age?: string;
-  };
-  badges?: string[];
-  tags?: string[];
-};
-
-const CARDS: Card[] = [
-  {
-    id: "c1",
-    popularity: 83, // 🔥 인기 지표 (예시)
-    image: {
-      uri: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=1200",
-    },
-    title: "#프론트 엔드",
-    smallLabel: "피어",
-    subtitle: "서울대학교 컴퓨터공학과",
-    description: "소개 : 간단한 프로젝트 함께 진행해보고 싶습니다.",
-    showAlert: true,
-    bookmarked: true,
-    details: {
-      purpose: "전공 공부 및 포트폴리오 작성",
-      school: "서울대학교 컴퓨터공학과",
-      location: "경기도 안양시",
-      time: "오후 7시 ~ 9시",
-      days: "주중",
-      freq: "주 2회, 3개월",
-      age: "만 23세/남",
-    },
-    badges: ["2~3인", "흡연자X", "피어", "같이 선호"],
-    tags: [
-      "#1 프론트엔드",
-      "#2 백엔드",
-      "#3 풀스택",
-      "#4 자바스크립트",
-      "#5 자료구조",
-    ],
-  },
-  {
-    id: "c2",
-    popularity: 71,
-    image: {
-      uri: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200",
-    },
-    title: "#모바일 앱",
-    smallLabel: "포트폴리오",
-    subtitle: "경희대학교 소프트웨어융합",
-    description: "RN/Expo로 간단한 앱을 만드는 스터디",
-    showAlert: true,
-    bookmarked: false,
-    details: {
-      purpose: "React Native 앱 포트폴리오 제작",
-      school: "경희대학교 소프트웨어융합",
-      location: "서울시 동대문구",
-      time: "저녁 8시 ~ 10시",
-      days: "주중",
-      freq: "주 2회, 2개월",
-      age: "만 22~26세",
-    },
-    badges: ["3~4인", "비흡연", "프로젝트 위주"],
-    tags: ["#ReactNative", "#Expo", "#TypeScript", "#포트폴리오"],
-  },
-  {
-    id: "c3",
-    popularity: 65,
-    image: {
-      uri: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1200",
-    },
-    title: "#알고리즘",
-    smallLabel: "스터디",
-    subtitle: "서강대학교 컴퓨터공학",
-    description: "매주 5문제, 코드 리뷰 진행",
-    showAlert: true,
-    bookmarked: false,
-    details: {
-      purpose: "알고리즘 문제 풀이 및 PS 실력 향상",
-      school: "서강대학교 컴퓨터공학",
-      location: "서울시 마포구",
-      time: "오후 7시 ~ 9시",
-      days: "토/일",
-      freq: "주 2회, 3개월",
-      age: "무관",
-    },
-    badges: ["5인 이하", "코드리뷰", "실력향상"],
-    tags: ["#Greedy", "#DP", "#Graph", "#PS", "#코딩테스트"],
-  },
-];
-
-/* ───────────── Utils: TODAY용 시드 셔플(우리 로직 자리) ───────────── */
-const pad2 = (n: number) => (n < 10 ? `0${n}` : `${n}`);
-const ymdSeed = () => {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = pad2(d.getMonth() + 1);
-  const day = pad2(d.getDate());
-  return `${y}${m}${day}`;
-};
-
-const hashString = (s: string) => {
-  // 간단/빠른 해시 (deterministic)
-  let h = 2166136261 >>> 0;
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return h >>> 0;
-};
-
-const seededShuffle = <T,>(arr: T[], seedStr: string): T[] => {
-  const copy = [...arr];
-  let seed = hashString(seedStr);
-  // 피셔-예이츠 with LCG
-  const rand = () => {
-    seed = (seed * 1664525 + 1013904223) >>> 0;
-    return seed / 0xffffffff;
-  };
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(rand() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-};
 
 /* ───────────── Screen ───────────── */
 const HomeScreen = () => {
   const [activeTopTab, setActiveTopTab] = useState<TopKey>("TODAY");
   const [page, setPage] = useState(0);
+  const [cards, setCards] = useState<Card[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [userFirstTag, setUserFirstTag] = useState<string>("");
 
   const scrollX = useRef(new Animated.Value(0)).current;
   const scrollRef = useRef<ScrollView | null>(null); // 👈 탭 전환 시 맨 앞으로 스크롤
@@ -216,26 +80,113 @@ const HomeScreen = () => {
   );
   const itemStride = useMemo(() => cardWidth + cardGap, [cardWidth, cardGap]);
 
+  /** 탭에 따라 보여줄 카드 목록 계산 */
+  const displayedCards = useMemo(() => {
+    return cards;
+  }, [cards]);
+
   const onMomentumEnd = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       const x = e.nativeEvent.contentOffset.x;
       const idx = Math.round(x / itemStride);
-      const clamped = Math.max(0, Math.min(idx, CARDS.length - 1));
+      const clamped = Math.max(0, Math.min(idx, displayedCards.length - 1));
       setPage(clamped);
     },
-    [itemStride]
+    [itemStride, displayedCards.length]
   );
 
   const centerGap = (width - cardWidth) / 2;
 
-  /** 탭에 따라 보여줄 카드 목록 계산 */
-  const displayedCards = useMemo(() => {
-    if (activeTopTab === "DISCOVER") {
-      // DISCOVER : 전체
-      return CARDS;
+  // 사용자 프로필에서 첫 번째 태그 가져오기
+  const loadUserProfile = async () => {
+    try {
+      const token = await getAuthToken();
+      if (!token) return;
+
+      const response = await getMyProfile(token);
+      const profile = response.option.meta_data.profile;
+
+      if (profile.study_tags && profile.study_tags.length > 0) {
+        // 우선순위 순으로 정렬하여 첫 번째 태그 가져오기
+        const sortedTags = profile.study_tags.sort(
+          (a, b) => a.priority - b.priority
+        );
+        setUserFirstTag(sortedTags[0].tag_name);
+      }
+    } catch (error) {
+      console.error("사용자 프로필 로드 실패:", error);
     }
-    // TODAY: 우리 로직
-    return seededShuffle(CARDS, `today-${ymdSeed()}`);
+  };
+
+  // TODAY 탭: 사용자의 첫 번째 태그로 매칭
+  const loadTodayCards = async () => {
+    try {
+      setIsLoading(true);
+      const token = await getAuthToken();
+      if (!token || !userFirstTag) return;
+
+      const response = await getMatchingByTag(token, {
+        tag_name: userFirstTag,
+        page: 1,
+        limit: 20,
+      });
+
+      const transformedCards = response.option.data.map(
+        transformMatchingProfileToCard
+      );
+      // 시드 셔플 적용
+      const shuffledCards = seededShuffle(
+        transformedCards,
+        `today-${ymdSeed()}`
+      );
+      setCards(shuffledCards);
+    } catch (error) {
+      console.error("TODAY 카드 로드 실패:", error);
+      Alert.alert("오류", "매칭 데이터를 불러오는데 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // DISCOVER 탭: 전체 사용자 매칭
+  const loadDiscoverCards = async () => {
+    try {
+      setIsLoading(true);
+      const token = await getAuthToken();
+      if (!token) return;
+
+      const response = await getAllMatching(token, 1, 20);
+      const transformedCards = response.option.data.map(
+        transformMatchingProfileToCard
+      );
+      setCards(transformedCards);
+    } catch (error) {
+      console.error("DISCOVER 카드 로드 실패:", error);
+      Alert.alert("오류", "매칭 데이터를 불러오는데 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 초기 로드
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  // 사용자 태그가 로드되면 TODAY 카드 로드
+  useEffect(() => {
+    if (userFirstTag && activeTopTab === "TODAY") {
+      loadTodayCards();
+    }
+  }, [userFirstTag, activeTopTab]);
+
+  // 탭 변경 시 데이터 로드
+  useEffect(() => {
+    if (activeTopTab === "TODAY" && userFirstTag) {
+      loadTodayCards();
+    } else if (activeTopTab === "DISCOVER") {
+      loadDiscoverCards();
+    }
   }, [activeTopTab]);
 
   /** 탭 바뀔 때 맨 앞으로 스크롤 & 페이지 리셋 */
@@ -257,84 +208,96 @@ const HomeScreen = () => {
 
       <Wrap>
         <Container>
-          <CarouselWrap>
-            <HScroll
-              ref={scrollRef}
-              snapToInterval={itemStride}
-              decelerationRate="fast"
-              onMomentumScrollEnd={onMomentumEnd}
-              onScroll={Animated.event(
-                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                { useNativeDriver: true }
-              )}
-              contentContainerStyle={{
-                flexGrow: 1,
-                alignItems: "center",
-                paddingLeft: centerGap,
-                paddingRight: centerGap,
-                paddingVertical: 24,
-              }}
-            >
-              {displayedCards.map((c, i) => {
-                const inputRange = [
-                  (i - 1) * itemStride,
-                  i * itemStride,
-                  (i + 1) * itemStride,
-                ];
+          {isLoading ? (
+            <LoadingWrap>
+              <LoadingText>매칭 데이터를 불러오는 중...</LoadingText>
+            </LoadingWrap>
+          ) : displayedCards.length === 0 ? (
+            <LoadingWrap>
+              <LoadingText>
+                {activeTopTab === "TODAY"
+                  ? "오늘의 추천 매칭이 없습니다"
+                  : "매칭 데이터가 없습니다"}
+              </LoadingText>
+            </LoadingWrap>
+          ) : (
+            <CarouselWrap>
+              <HScroll
+                ref={scrollRef}
+                snapToInterval={itemStride}
+                decelerationRate="fast"
+                onMomentumScrollEnd={onMomentumEnd}
+                onScroll={Animated.event(
+                  [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                  { useNativeDriver: true }
+                )}
+                contentContainerStyle={{
+                  flexGrow: 1,
+                  alignItems: "center",
+                  paddingLeft: centerGap,
+                  paddingRight: centerGap,
+                  paddingVertical: 24,
+                }}
+              >
+                {displayedCards.map((c, i) => {
+                  const inputRange = [
+                    (i - 1) * itemStride,
+                    i * itemStride,
+                    (i + 1) * itemStride,
+                  ];
 
-                const scale = scrollX.interpolate({
-                  inputRange,
-                  outputRange: [0.92, 1, 0.92],
-                  extrapolate: "clamp",
-                });
+                  const scale = scrollX.interpolate({
+                    inputRange,
+                    outputRange: [0.92, 1, 0.92],
+                    extrapolate: "clamp",
+                  });
 
-                const opacity = scrollX.interpolate({
-                  inputRange,
-                  outputRange: [0.85, 1, 0.85],
-                  extrapolate: "clamp",
-                });
+                  const opacity = scrollX.interpolate({
+                    inputRange,
+                    outputRange: [0.85, 1, 0.85],
+                    extrapolate: "clamp",
+                  });
 
-                const translateY = scrollX.interpolate({
-                  inputRange,
-                  outputRange: [6, 0, 6],
-                  extrapolate: "clamp",
-                });
+                  const translateY = scrollX.interpolate({
+                    inputRange,
+                    outputRange: [6, 0, 6],
+                    extrapolate: "clamp",
+                  });
 
-                return (
-                  <Animated.View
-                    key={c.id}
-                    style={{
-                      width: cardWidth,
-                      marginRight: i < displayedCards.length - 1 ? cardGap : 0,
-                      transform: [{ scale }, { translateY }],
-                      opacity,
-                    }}
-                  >
-                    <StudyCard
-                      image={c.image}
-                      title={c.title}
-                      smallLabel={c.smallLabel}
-                      subtitle={c.subtitle}
-                      description={c.description}
-                      showAlert={c.showAlert}
-                      bookmarked={c.bookmarked}
-                      details={c.details}
-                      badges={c.badges}
-                      tags={c.tags}
-                      onPressCta={() => navi.navigate("Talk")}
-                    />
-                  </Animated.View>
-                );
-              })}
-            </HScroll>
-          </CarouselWrap>
+                  return (
+                    <Animated.View
+                      key={c.id}
+                      style={{
+                        width: cardWidth,
+                        marginRight:
+                          i < displayedCards.length - 1 ? cardGap : 0,
+                        transform: [{ scale }, { translateY }],
+                        opacity,
+                      }}
+                    >
+                      <StudyCard
+                        image={c.image}
+                        title={c.title}
+                        smallLabel={c.smallLabel}
+                        subtitle={c.subtitle}
+                        description={c.description}
+                        showAlert={c.showAlert}
+                        bookmarked={c.bookmarked}
+                        details={c.details}
+                        badges={c.badges}
+                        tags={c.tags}
+                        onPressCta={() => navi.navigate("Talk")}
+                      />
+                    </Animated.View>
+                  );
+                })}
+              </HScroll>
+            </CarouselWrap>
+          )}
         </Container>
       </Wrap>
 
       <BottomTabBar />
-
-      {/* 저장된 토큰 삭제를 위한 임시 삭제 버튼 개발버전 이후 삭제(./utils) */}
-      <DevButton />
     </Screen>
   );
 };
