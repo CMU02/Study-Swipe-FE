@@ -69,6 +69,7 @@ type NoticeItem = {
   };
   prefs: string[]; // secondaryColor 태그
   skills: string[]; // clickColor 태그
+  matchingStatus?: "completed" | "in-progress"; // FROM 탭용 매칭 상태
 };
 
 const toItems: NoticeItem[] = [
@@ -134,6 +135,7 @@ const fromItems: NoticeItem[] = [
       "#4 UMAP",
       "#5 Matplotlib",
     ],
+    matchingStatus: "in-progress", // 매칭 진행중 상태 (매칭 취소 가능)
   },
   {
     id: "from-2",
@@ -156,6 +158,7 @@ const fromItems: NoticeItem[] = [
       "#4 Zustand",
       "#5 Figma",
     ],
+    matchingStatus: "completed", // 매칭 완료 상태
   },
 ];
 
@@ -181,7 +184,7 @@ const labelsByTab: Record<
   FROM: {
     expandedTitle: "신청 정보",
     primaryButtonLabel: "매칭 취소",
-    secondaryButtonLabel: "매칭중",
+    secondaryButtonLabel: "매칭 취소",
   },
 };
 
@@ -205,8 +208,18 @@ export default function NotificationScreen() {
             tag={item.tag}
             subTag={item.subTag}
             expandedTitle={labels.expandedTitle}
-            primaryButtonLabel={labels.primaryButtonLabel}
+            primaryButtonLabel={
+              activeTopTab === "FROM" && item.matchingStatus === "completed"
+                ? "매칭 완료"
+                : labels.primaryButtonLabel
+            }
             secondaryButtonLabel={labels.secondaryButtonLabel}
+            isDisabled={
+              activeTopTab === "FROM" && item.matchingStatus === "completed"
+            }
+            matchingStatus={
+              activeTopTab === "FROM" ? item.matchingStatus : undefined
+            }
           >
             <Card>
               <Info>

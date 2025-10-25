@@ -8,6 +8,7 @@ import {
   primaryColor,
   unClickColor,
   textColor,
+  secondaryColor,
 } from "../styles/Color";
 
 // 버튼 색상
@@ -27,6 +28,8 @@ type NatificationBoxProps = {
   onToggle?: (expanded: boolean) => void;
   dividerHeight?: number;
   style?: any;
+  isDisabled?: boolean; // 버튼 비활성화 여부
+  matchingStatus?: "completed" | "in-progress"; // 매칭 상태
 };
 
 const Card = styled(Animated.View)`
@@ -128,6 +131,8 @@ export default function NatificationBox({
   onToggle,
   dividerHeight = 14,
   style,
+  isDisabled = false,
+  matchingStatus,
 }: NatificationBoxProps) {
   const [expanded, setExpanded] = useState(false);
 
@@ -173,6 +178,9 @@ export default function NatificationBox({
   });
 
   const toggle = useCallback(() => {
+    // 매칭 완료 상태이거나 비활성화된 경우 토글 방지
+    if (isDisabled || matchingStatus === "completed") return;
+
     const next = !expanded;
     setExpanded(next);
     Animated.timing(progress, {
@@ -181,9 +189,18 @@ export default function NatificationBox({
       easing: Easing.out(Easing.cubic),
       useNativeDriver: false,
     }).start(() => onToggle?.(next));
-  }, [expanded, onToggle, progress]);
+  }, [expanded, onToggle, progress, isDisabled, matchingStatus]);
 
-  const primaryBg = expanded ? BTN_ACTIVE : BTN_DEFAULT;
+  // 버튼 색상 결정
+  const primaryBg =
+    isDisabled || matchingStatus === "completed"
+      ? BTN_ACTIVE // 비활성화 색상 (unClickColor)
+      : matchingStatus === "in-progress" && !expanded
+      ? primaryColor // 매칭중 버튼은 primaryColor
+      : BTN_DEFAULT; // 기본 색상 (clickColor)
+
+  // 보조 버튼 색상 (매칭 취소 버튼)
+  const secondaryBg = secondaryColor;
 
   return (
     <Card
@@ -218,7 +235,7 @@ export default function NatificationBox({
             }}
           >
             <TopButton
-              bg={BTN_SECOND}
+              bg={secondaryBg}
               onPress={() => onSecondaryPress?.()}
               hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
             >
@@ -234,8 +251,19 @@ export default function NatificationBox({
               toggle();
             }}
             hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+            disabled={isDisabled || matchingStatus === "completed"}
           >
-            <TopButtonText>{primaryButtonLabel}</TopButtonText>
+            <TopButtonText>
+              {matchingStatus === "completed"
+                ? "매칭 완료"
+                : matchingStatus === "in-progress" && expanded
+                ? "닫기"
+                : matchingStatus === "in-progress" && !expanded
+                ? "매칭중"
+                : expanded
+                ? "닫기"
+                : primaryButtonLabel}
+            </TopButtonText>
           </TopButton>
         </ButtonGroup>
       </Row>
