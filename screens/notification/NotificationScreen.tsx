@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 import BrandHeader from "../../components/logo/BrandHeader";
 import TopTabs from "../../components/TopTabs";
@@ -12,11 +13,15 @@ const Screen = styled.View`
   background-color: #fff;
 `;
 
-const Notification = styled.View`
+const NotificationContainer = styled.View`
   flex: 1;
+`;
+
+const NotificationContent = styled.View`
   justify-content: flex-start;
   align-items: center;
   margin-top: 15px;
+  padding-bottom: 20px;
 `;
 
 const Card = styled.View`
@@ -252,7 +257,15 @@ export default function NotificationScreen() {
       />
 
       {/* 탭 전환 시 내부 상태 초기화 (예: 확장/스크롤) */}
-      <Notification key={activeTopTab}>{content}</Notification>
+      <NotificationContainer>
+        <ScrollView
+          key={activeTopTab}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <NotificationContent>{content}</NotificationContent>
+        </ScrollView>
+      </NotificationContainer>
 
       <BottomTabBar />
     </Screen>

@@ -245,6 +245,7 @@ const ProfileScreen = () => {
                   tags={displayTags.map((t, i) => `#${i + 1} ${t}`)}
                   variant="edit"
                   onPressCta={handleEditPress}
+                  hideTopRightButtons={true}
                 />
               </CardWrap>
             </Center>

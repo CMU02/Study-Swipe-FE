@@ -35,17 +35,11 @@ const Card = styled(Animated.View)`
   margin: 5px 21px;
   align-self: stretch;
   overflow: hidden;
-  ${Platform.select({
-    ios: `
-      shadow-color: #000;
-      shadow-offset: 1px 1px;
-      shadow-opacity: 0.25;
-      shadow-radius: 1px;
-    `,
-    android: `
-      elevation: 1;
-    `,
-  })}
+  shadow-color: #000;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
 `;
 
 const Row = styled.View`

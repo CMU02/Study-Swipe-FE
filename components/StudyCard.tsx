@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components/native";
 import {
   TouchableOpacity,
@@ -7,6 +7,9 @@ import {
   Dimensions,
   View,
   Pressable,
+  Image,
+  Animated,
+  Alert,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import {
@@ -47,6 +50,9 @@ export interface StudyCardProps {
   onPressCta?: () => void;
   ctaDisabled?: boolean;
   variant?: "apply" | "edit";
+
+  /** 상단 우측 버튼들 숨기기 */
+  hideTopRightButtons?: boolean;
 
   style?: any;
 }
@@ -106,6 +112,76 @@ const BadgeTopRight = styled.View`
   top: 12px;
   right: 12px;
   flex-direction: row;
+  align-items: center;
+`;
+
+const MenuButton = styled.TouchableOpacity`
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  background: ${thirdColor};
+  align-items: center;
+  justify-content: center;
+  shadow-color: #000;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
+`;
+
+const ActionButton = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 14px;
+  background: ${thirdColor};
+  margin-right: 8px;
+  shadow-color: #000;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
+`;
+
+const ActionButtonText = styled.Text`
+  font-size: 12px;
+  font-family: Paperlogy-SemiBold;
+  color: ${textColor};
+  margin-left: 4px;
+`;
+
+const DropdownMenu = styled.View`
+  margin-top: 8px;
+  background: ${thirdColor};
+  border-radius: 8px;
+  padding: 2px;
+  shadow-color: #000;
+  shadow-offset: 1px 1px;
+  shadow-opacity: 0.25;
+  shadow-radius: 1px;
+  elevation: 1;
+`;
+
+const MenuItem = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 6px;
+  margin: 1px 0;
+`;
+
+const MenuDivider = styled.View`
+  height: 1px;
+  background-color: ${textColor};
+  opacity: 0.2;
+  margin: 2px 8px;
+`;
+
+const MenuItemText = styled.Text`
+  font-size: 14px;
+  font-family: Paperlogy-SemiBold;
+  color: ${textColor};
+  margin-left: 8px;
 `;
 
 const BadgeIcon = styled.View`
@@ -281,13 +357,70 @@ export default function StudyCard(props: StudyCardProps) {
     onPressCta,
     ctaDisabled,
     variant = "apply",
+    hideTopRightButtons = false,
   } = props;
 
   const [flipped, setFlipped] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const bookmarkAnim = useRef(new Animated.Value(0)).current;
+  const reportAnim = useRef(new Animated.Value(0)).current;
 
   const resolvedLabel =
     ctaLabel ??
     (variant === "edit" ? "프로필 수정하기" : "스터디 함께하기 신청");
+
+  useEffect(() => {
+    if (menuOpen) {
+      // 순차적으로 애니메이션 실행
+      Animated.sequence([
+        Animated.timing(bookmarkAnim, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(reportAnim, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    } else {
+      // 동시에 숨기기
+      Animated.parallel([
+        Animated.timing(bookmarkAnim, {
+          toValue: 0,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(reportAnim, {
+          toValue: 0,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [menuOpen]);
+
+  const handleMenuToggle = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleBookmark = () => {
+    // 즐겨찾기 로직 구현
+    Alert.alert("알림", "즐겨찾기에 추가되었습니다.", [
+      { text: "확인", style: "default" },
+    ]);
+    setMenuOpen(false);
+  };
+
+  const handleReport = () => {
+    // 신고하기 로직 구현
+    Alert.alert("알림", "신고가 완료되었습니다.", [
+      { text: "확인", style: "default" },
+    ]);
+    setMenuOpen(false);
+  };
 
   return (
     <CardRoot>
@@ -345,8 +478,18 @@ export default function StudyCard(props: StudyCardProps) {
                 activeOpacity={0.8}
                 onPress={onPressCta ?? (() => {})}
               >
-                {variant === "edit" && (
-                  <Feather name="edit-2" size={20} color={textColor} />
+                {variant === "edit" ? (
+                  <Image
+                    source={require("../assets/images/modify..png")}
+                    style={{ width: 20, height: 20 }}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <Image
+                    source={require("../assets/images/link.png")}
+                    style={{ width: 20, height: 20 }}
+                    resizeMode="contain"
+                  />
                 )}
                 <CtaText>{resolvedLabel}</CtaText>
               </CtaBtn>
@@ -356,26 +499,65 @@ export default function StudyCard(props: StudyCardProps) {
           /* ───── Front (커버) ───── */
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={() => setFlipped(true)}
+            onPress={() => {
+              setFlipped(true);
+              setMenuOpen(false);
+            }}
           >
             <Cover source={image} resizeMode="cover">
-              <BadgeTopRight>
-                {showAlert ? (
-                  <BadgeIcon>
-                    <Feather name="alert-triangle" size={15} color="#e11d48" />
-                  </BadgeIcon>
-                ) : null}
+              {!hideTopRightButtons && (
+                <BadgeTopRight>
+                  <Animated.View
+                    style={{
+                      opacity: reportAnim,
+                      transform: [
+                        {
+                          translateX: reportAnim.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [80, 0],
+                          }),
+                        },
+                      ],
+                    }}
+                  >
+                    <ActionButton onPress={handleReport} activeOpacity={0.8}>
+                      <Feather
+                        name="alert-triangle"
+                        size={14}
+                        color="#e11d48"
+                      />
+                      <ActionButtonText>신고하기</ActionButtonText>
+                    </ActionButton>
+                  </Animated.View>
 
-                {typeof bookmarked === "boolean" ? (
-                  <BadgeIcon>
+                  <Animated.View
+                    style={{
+                      opacity: bookmarkAnim,
+                      transform: [
+                        {
+                          translateX: bookmarkAnim.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [80, 0],
+                          }),
+                        },
+                      ],
+                    }}
+                  >
+                    <ActionButton onPress={handleBookmark} activeOpacity={0.8}>
+                      <Feather name="star" size={14} color="#f59e0b" />
+                      <ActionButtonText>즐겨찾기</ActionButtonText>
+                    </ActionButton>
+                  </Animated.View>
+
+                  <MenuButton onPress={handleMenuToggle} activeOpacity={0.8}>
                     <Feather
-                      name="star"
-                      size={15}
-                      color={bookmarked ? "#f59e0b" : "#111"}
+                      name={menuOpen ? "x" : "more-horizontal"}
+                      size={16}
+                      color={textColor}
                     />
-                  </BadgeIcon>
-                ) : null}
-              </BadgeTopRight>
+                  </MenuButton>
+                </BadgeTopRight>
+              )}
 
               <CaptionWrap>
                 <TitleRow>
