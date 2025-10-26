@@ -11,7 +11,10 @@ const TalkNavi = () => {
   return (
     <Stack.Navigator
       initialRouteName="Notification"
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false, // 제스처 뒤로가기 막기
+      }}
     >
       <Stack.Screen name="Notification" component={NotificationScreen} />
     </Stack.Navigator>

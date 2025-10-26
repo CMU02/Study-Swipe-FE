@@ -1,5 +1,7 @@
 import { useState, useMemo } from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, Alert } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import { useApplication } from "../../contexts/ApplicationContext";
 import styled from "styled-components/native";
 import BrandHeader from "../../components/logo/BrandHeader";
 import TopTabs from "../../components/TopTabs";
@@ -116,8 +118,8 @@ const toItems: NoticeItem[] = [
 const fromItems: NoticeItem[] = [
   {
     id: "from-1",
-    tag: "데이터사이언스",
-    subTag: "프로젝트",
+    tag: "SQLD",
+    subTag: "러너",
     info: {
       purpose: "캡스톤 데이터 분석",
       university: "한양대학교 산업공학과",
@@ -135,7 +137,7 @@ const fromItems: NoticeItem[] = [
       "#4 UMAP",
       "#5 Matplotlib",
     ],
-    matchingStatus: "in-progress", // 매칭 진행중 상태 (매칭 취소 가능)
+    matchingStatus: "completed", // 매칭 진행중 상태 (매칭 취소 가능)
   },
   {
     id: "from-2",
@@ -162,10 +164,7 @@ const fromItems: NoticeItem[] = [
   },
 ];
 
-const itemsByTab: Record<TopKey, NoticeItem[]> = {
-  TO: toItems,
-  FROM: fromItems,
-};
+// itemsByTab는 함수 내부에서 동적으로 생성하도록 변경
 
 // 탭별 라벨/타이틀 세트
 const labelsByTab: Record<
@@ -188,16 +187,46 @@ const labelsByTab: Record<
   },
 };
 
+type NotificationScreenParams = {
+  initialTab?: TopKey;
+};
+
 export default function NotificationScreen() {
-  const [activeTopTab, setActiveTopTab] = useState<TopKey>("TO");
+  const route = useRoute();
+  const params = route.params as NotificationScreenParams | undefined;
+  const [activeTopTab, setActiveTopTab] = useState<TopKey>(
+    params?.initialTab || "TO"
+  );
+  const { appliedStudies, removeAppliedStudy } = useApplication();
 
   const goNextNotification = (key: TopKey) => {
     if (key !== activeTopTab) setActiveTopTab(key);
   };
 
+  // 매칭 취소 핸들러
+  const handleCancelMatching = (itemId: string, itemTag: string) => {
+    Alert.alert("매칭 취소", "정말 취소하시겠습니까?", [
+      {
+        text: "아니오",
+        style: "cancel",
+      },
+      {
+        text: "예",
+        style: "destructive",
+        onPress: () => {
+          // 신청한 스터디 목록에서 해당 항목 삭제
+          removeAppliedStudy(itemId);
+          Alert.alert("취소 완료", "매칭이 취소되었습니다.");
+        },
+      },
+    ]);
+  };
+
   // 탭 별 콘텐츠 (TopTabs 아래만 교체)
   const content = useMemo(() => {
-    const items = itemsByTab[activeTopTab];
+    // FROM 탭의 경우 신청한 스터디와 기존 더미 데이터를 합침
+    const items =
+      activeTopTab === "FROM" ? [...appliedStudies, ...fromItems] : toItems;
     const labels = labelsByTab[activeTopTab];
 
     return (
@@ -220,6 +249,15 @@ export default function NotificationScreen() {
             matchingStatus={
               activeTopTab === "FROM" ? item.matchingStatus : undefined
             }
+            onSecondaryPress={() => {
+              // FROM 탭에서 매칭 취소 버튼 클릭 시
+              if (
+                activeTopTab === "FROM" &&
+                item.matchingStatus === "in-progress"
+              ) {
+                handleCancelMatching(item.id, item.tag);
+              }
+            }}
           >
             <Card>
               <Info>
@@ -256,7 +294,7 @@ export default function NotificationScreen() {
         ))}
       </>
     );
-  }, [activeTopTab]);
+  }, [activeTopTab, appliedStudies]);
 
   return (
     <Screen>

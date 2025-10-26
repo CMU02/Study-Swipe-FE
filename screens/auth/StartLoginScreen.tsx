@@ -1,4 +1,5 @@
 import styled from "styled-components/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import SplashLogo from "../../components/logo/SplashLogo";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { primaryColor, secondaryColor } from "../../styles/Color";
@@ -27,6 +28,7 @@ const Footer = styled.View`
 `;
 
 const StartLoginScreen = () => {
+  const insets = useSafeAreaInsets();
   const navi = useNavigation<NativeStackNavigationProp<StackList>>();
 
   const goToLoginScreen = () => {
@@ -38,7 +40,7 @@ const StartLoginScreen = () => {
   };
 
   return (
-    <Screen>
+    <Screen style={{ paddingBottom: insets.bottom }}>
       <Content>
         <SplashLogo />
       </Content>

@@ -17,7 +17,7 @@ export type StackList = {
   StudentVerify: { user_id: string };
   UserSetting: undefined;
   Home: undefined;
-  Talk: undefined;
+  Talk: { initialTab?: "TO" | "FROM" } | undefined;
   Profile: undefined;
 };
 
@@ -30,6 +30,7 @@ const AppNavigator = () => {
       screenOptions={{
         headerShown: false,
         animation: "none",
+        gestureEnabled: false, // 제스처 뒤로가기 막기
       }}
     >
       <Stack.Screen name="Starting" component={StartingScreen} />
